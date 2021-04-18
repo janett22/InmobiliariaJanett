@@ -1,10 +1,13 @@
 ﻿using InmobiliariaJanett.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace InmobiliariaJanett.Controllers
@@ -18,20 +21,36 @@ namespace InmobiliariaJanett.Controllers
             _logger = logger;
         }
 
+
         public IActionResult Index()
         {
             return View();
         }
 
-        public IActionResult Privacy()
+        [Authorize(Policy = "Administrador")]
+        public ActionResult Admin()
         {
             return View();
         }
 
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
+        public ActionResult Restringido()
         {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+            return View();
         }
+
+        public IActionResult Fecha(int anio, int mes, int dia)
+        {
+            DateTime dt = new DateTime(anio, mes, dia);
+            ViewBag.Fecha = dt;
+            return View();
+        }
+
+        public IActionResult Ruta(string valor)
+        {
+            ViewBag.Valor = valor;
+            return View();
+        }
+
+       
     }
 }

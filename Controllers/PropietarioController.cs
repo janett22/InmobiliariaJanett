@@ -1,4 +1,4 @@
-﻿using InmobiliariaJanett.Models;
+﻿ using InmobiliariaJanett.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
@@ -19,21 +19,21 @@ namespace InmobiliariaJanett.Controllers
             this.repositorioPropietario = new RepositorioPropietario(configuration);
             this.configuration = configuration;
         }
-        // GET: PropietariosController
+        // GET: PropietarioController
         public ActionResult Index()
         {
             var lista = repositorioPropietario.ObtenerTodos();
             return View(lista);
         }
 
-        // GET: PropietariosController/Details/5
+        // GET: PropietarioController/Details/5
         public ActionResult Details(int id)
         {
             var p = repositorioPropietario.ObtenerPorId(id);
             return View(p);
         }
 
-        // GET: PropietariosController/Create
+        // GET: PropietarioController/Create
         public ActionResult Create()
         {
             return View();
