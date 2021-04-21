@@ -1,4 +1,5 @@
 ﻿using InmobiliariaJanett.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
@@ -19,29 +20,31 @@ namespace InmobiliariaJanett.Controllers
             this.repositorioInquilino = new RepositorioInquilino(configuration);
             this.configuration = configuration;
         }
-        // GET: InquilinosController
+        // GET: InquilinoController
         public ActionResult Index()
         {
             List<Inquilino> lista = repositorioInquilino.ObtenerTodos();
             return View(lista);
         }
 
-        // GET: InquilinosController/Details/5
+        // GET: InquilinoController/Details/5
         public ActionResult Details(int id)
         {
             var i = repositorioInquilino.ObtenerPorId(id);
             return View(i);
         }
 
-        // GET: InquilinosController/Create
+        // GET: InquilinoController/Create
+        [Authorize(Policy = "Administrador")]
         public ActionResult Create()
         {
             return View();
         }
 
-        // POST: InquilinosController/Create
+        // POST: InquilinoController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Policy = "Administrador")]
         public ActionResult Create(Inquilino i)
         {
             try
@@ -55,7 +58,8 @@ namespace InmobiliariaJanett.Controllers
             }
         }
 
-        // GET: InquilinosController/Edit/5
+        // GET: InquilinoController/Edit/5
+        [Authorize(Policy = "Administrador")]
         public ActionResult Edit(int id)
         {
             var i = repositorioInquilino.ObtenerPorId(id);
@@ -66,9 +70,10 @@ namespace InmobiliariaJanett.Controllers
             return View(i);
         }
 
-        // POST: InquilinosController/Edit/5
+        // POST: InquilinoController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Policy = "Administrador")]
         public ActionResult Edit(int id, IFormCollection collection)
         {
             Inquilino i = null;
@@ -92,7 +97,8 @@ namespace InmobiliariaJanett.Controllers
             }
         }
 
-        // GET: InquilinosController/Delete/5
+        // GET: InquilinoController/Delete/5
+        [Authorize(Policy = "Administrador")]
         public ActionResult Delete(int id)
         {
             var i = repositorioInquilino.ObtenerPorId(id);
@@ -103,9 +109,10 @@ namespace InmobiliariaJanett.Controllers
             return View(i);
         }
 
-        // POST: InquilinosController/Delete/5
+        // POST: InquilinoController/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Policy = "Administrador")]
         public ActionResult Delete(int id, Inquilino entidad)
         {
             try
