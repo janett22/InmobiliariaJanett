@@ -28,13 +28,22 @@ namespace InmobiliariaJanett.Controllers
         // GET: PagosController
         public ActionResult Index(int id)
         {
-            TempData["IdPago"] = id;
-            var lista = repositorio.BuscarPorContrato(id);
-            if (TempData.ContainsKey("Id"))
-                ViewBag.Id = TempData["Id"];
-            if (TempData.ContainsKey("Mensaje"))
-                ViewBag.Mensaje = TempData["Mensaje"];
-            return View(lista);
+            try
+            {
+                TempData["IdPago"] = id;
+                var lista = repositorio.BuscarPorContrato(id);
+                if (TempData.ContainsKey("Id"))
+                    ViewBag.Id = TempData["Id"];
+                if (TempData.ContainsKey("Mensaje"))
+                    ViewBag.Mensaje = TempData["Mensaje"];
+                return View(lista);
+            }
+            catch (Exception ex)
+            {
+                throw;
+            
+            }
+
 
         }
 
