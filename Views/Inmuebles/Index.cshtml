@@ -19,10 +19,19 @@
                 @Html.DisplayNameFor(model => model.Direccion)
             </th>
             <th>
+                @Html.DisplayNameFor(model => model.Uso)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Tipo)
+            </th>
+            <th>
                 @Html.DisplayNameFor(model => model.Ambientes)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Superficie)
+                @Html.DisplayNameFor(model => model.Precio)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Estado)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.IdPropietario)
@@ -39,19 +48,30 @@
             <td>
                 @Html.DisplayFor(modelItem => item.Direccion)
             </td>
+
+            <td>
+                @Html.DisplayFor(modelItem => item.UsoNombre)
+            </td>
+
+            <td>
+                @Html.DisplayFor(modelItem => item.TipoNombre)
+            </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Ambientes)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Superficie)
+                @Html.DisplayFor(modelItem => item.Precio)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Estado)
             </td>
             <td>
                 @(item.Duenio.Nombre + " " + item.Duenio.Apellido)
             </td>
             <td>
                 @Html.ActionLink("Editar", "Edit", new { id = item.Id }) |
-                @Html.ActionLink("Eliminar", "Eliminar", new { id = item.Id }) |
-            </td> 
+                @Html.ActionLink("Eliminar", "Delete", new { id = item.Id }) |
+            </td>
         </tr>
 }
     </tbody>

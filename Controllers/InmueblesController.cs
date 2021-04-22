@@ -51,6 +51,8 @@ namespace InmobiliariaJanett.Controllers
         {
 
             ViewBag.Propietarios = repositorioPropietario.ObtenerTodos();
+            ViewBag.Usos = Inmueble.ObtenerUsos();
+            ViewBag.Tipos = Inmueble.ObtenerTipos();
             return View();
         }
 
@@ -71,6 +73,9 @@ namespace InmobiliariaJanett.Controllers
                 else
                 {
                     ViewBag.Propietarios = repositorioPropietario.ObtenerTodos();
+                    ViewBag.Usos = Inmueble.ObtenerUsos();
+                    ViewBag.Tipos = Inmueble.ObtenerTipos();
+
                     return View(entidad);
                 }
             }
@@ -83,7 +88,7 @@ namespace InmobiliariaJanett.Controllers
         }
 
         // GET: InmueblesController/Edit/5
-
+        [Authorize(Policy = "Administrador")]
         public ActionResult Edit(int id)
         {
             var entidad = repositorio.ObtenerPorId(id);
@@ -92,12 +97,15 @@ namespace InmobiliariaJanett.Controllers
                 ViewBag.Mensaje = TempData["Mensaje"];
             if (TempData.ContainsKey("Error"))
                 ViewBag.Error = TempData["Error"];
+            ViewBag.Usos = Inmueble.ObtenerUsos();
+            ViewBag.Tipos = Inmueble.ObtenerTipos();
             return View(entidad);
         }
  
     // POST: InmueblesController/Edit/5
     [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Policy = "Administrador")]
         public ActionResult Edit(int id, Inmueble entidad)
         {
             try
@@ -110,6 +118,8 @@ namespace InmobiliariaJanett.Controllers
              catch (Exception ex)
             {
                 ViewBag.Propietarios = repositorioPropietario.ObtenerTodos();
+                ViewBag.Usos = Inmueble.ObtenerUsos();
+                ViewBag.Tipos = Inmueble.ObtenerTipos();
                 ViewBag.Error = ex.Message;
                 ViewBag.StackTrate = ex.StackTrace;
                 return View(entidad);
@@ -119,7 +129,7 @@ namespace InmobiliariaJanett.Controllers
 
         // GET: InmueblesController/Delete/5
         [Authorize(Policy = "Administrador")]
-        public ActionResult Eliminar(int id)
+        public ActionResult Delete(int id)
         {
             var entidad = repositorio.ObtenerPorId(id);
             if (TempData.ContainsKey("Mensaje"))
@@ -134,7 +144,7 @@ namespace InmobiliariaJanett.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Policy = "Administrador")]
-        public ActionResult Eliminar(int id, Inmueble entidad)
+        public ActionResult Delete(int id, Inmueble entidad)
         {
             try
             {

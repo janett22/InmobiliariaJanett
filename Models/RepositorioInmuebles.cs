@@ -20,15 +20,18 @@ namespace InmobiliariaJanett.Models
 			int res = -1;
 			using (SqlConnection connection = new SqlConnection(connectionString))
 			{
-				string sql = $"INSERT INTO Inmuebles (Direccion, Ambientes, Superficie, IdPropietario) " +
-					"VALUES (@direccion, @ambientes, @superficie, @Idpropietario);" +
+				string sql = $"INSERT INTO Inmuebles (Direccion, Uso, Tipo, Ambientes, Precio, Estado, IdPropietario) " +
+					"VALUES (@direccion, @uso, @tipo, @ambientes, @precio, @estado, @Idpropietario);" +
 					"SELECT SCOPE_IDENTITY();";//devuelve el id insertado (LAST_INSERT_ID para mysql)
 				using (var command = new SqlCommand(sql, connection))
 				{
 					command.CommandType = CommandType.Text;
 					command.Parameters.AddWithValue("@direccion", entidad.Direccion);
+					command.Parameters.AddWithValue("@uso", entidad.Uso);
+					command.Parameters.AddWithValue("@tipo", entidad.Tipo);
 					command.Parameters.AddWithValue("@ambientes", entidad.Ambientes);
-					command.Parameters.AddWithValue("@superficie", entidad.Superficie);
+					command.Parameters.AddWithValue("@precio", entidad.Precio);
+					command.Parameters.AddWithValue("@estado", entidad.Estado);
 					command.Parameters.AddWithValue("@IdPropietario", entidad.IdPropietario);
 					connection.Open();
 					res = Convert.ToInt32(command.ExecuteScalar());
@@ -62,13 +65,16 @@ namespace InmobiliariaJanett.Models
 			using (SqlConnection connection = new SqlConnection(connectionString))
 			{
 				string sql = "UPDATE Inmuebles SET " +
-					"Direccion=@direccion, Ambientes=@ambientes, Superficie=@superficie, IdPropietario=@Idpropietario " +
+					"Direccion=@direccion, Uso=@uso, Tipo=@tipo, Ambientes=@ambientes, Precio=@precio, Estado=@estado, IdPropietario=@Idpropietario " +
 					"WHERE Id = @id";
 				using (SqlCommand command = new SqlCommand(sql, connection))
 				{
 					command.Parameters.AddWithValue("@direccion", entidad.Direccion);
+					command.Parameters.AddWithValue("@uso", entidad.Uso);
+					command.Parameters.AddWithValue("@tipo", entidad.Tipo);
 					command.Parameters.AddWithValue("@ambientes", entidad.Ambientes);
-					command.Parameters.AddWithValue("@superficie", entidad.Superficie);
+					command.Parameters.AddWithValue("@precio", entidad.Precio);
+					command.Parameters.AddWithValue("@estado", entidad.Estado);
 					command.Parameters.AddWithValue("@IdPropietario", entidad.IdPropietario);
 					command.Parameters.AddWithValue("@id", entidad.Id);
 					command.CommandType = CommandType.Text;
@@ -85,7 +91,7 @@ namespace InmobiliariaJanett.Models
 			IList<Inmueble> res = new List<Inmueble>();
 			using (SqlConnection connection = new SqlConnection(connectionString))
 			{
-				string sql = "SELECT Id, Direccion, Ambientes, Superficie, i.IdPropietario," +
+				string sql = "SELECT Id, Direccion, Uso, Tipo, Ambientes, Precio, Estado, i.IdPropietario," +
 					" p.Nombre, p.Apellido" +
 					" FROM Inmuebles i INNER JOIN Propietarios p ON i.IdPropietario = p.IdPropietario";
 				using (SqlCommand command = new SqlCommand(sql, connection))
@@ -99,14 +105,17 @@ namespace InmobiliariaJanett.Models
 						{
 							Id = reader.GetInt32(0),
 							Direccion = reader.GetString(1),
-							Ambientes = reader.GetInt32(2),
-							Superficie = reader.GetInt32(3),
-							IdPropietario = reader.GetInt32(4),
+							Uso = reader.GetInt32(2),
+							Tipo = reader.GetInt32(3),
+							Ambientes = reader.GetInt32(4),
+							Precio = reader.GetDecimal(5),
+							Estado = reader.GetBoolean(6),
+							IdPropietario = reader.GetInt32(7),
 							Duenio = new Propietario
 							{
-								IdPropietario = reader.GetInt32(4),
-								Nombre = reader.GetString(5),
-								Apellido = reader.GetString(6),
+								IdPropietario = reader.GetInt32(7),
+								Nombre = reader.GetString(8),
+								Apellido = reader.GetString(9),
 							}
 						};
 						res.Add(entidad);
@@ -122,7 +131,7 @@ namespace InmobiliariaJanett.Models
 			Inmueble entidad = null;
 			using (SqlConnection connection = new SqlConnection(connectionString))
 			{
-				string sql = $"SELECT Id, Direccion, Ambientes, Superficie, I.IdPropietario, p.Nombre, p.Apellido" +
+				string sql = "SELECT Id, Direccion, Uso, Tipo, Ambientes, Precio, Estado, i.IdPropietario, p.Nombre, p.Apellido" +
 					$" FROM Inmuebles i INNER JOIN Propietarios p ON i.IdPropietario = p.IdPropietario" +
 					$" WHERE Id=@id";
 				using (SqlCommand command = new SqlCommand(sql, connection))
@@ -137,14 +146,17 @@ namespace InmobiliariaJanett.Models
 						{
 							Id = reader.GetInt32(0),
 							Direccion = reader.GetString(1),
-							Ambientes = reader.GetInt32(2),
-							Superficie = reader.GetInt32(3),
-							IdPropietario = reader.GetInt32(4),
+							Uso = reader.GetInt32(2),
+							Tipo = reader.GetInt32(3),
+							Ambientes = reader.GetInt32(4),
+							Precio = reader.GetDecimal(5),
+							Estado = reader.GetBoolean(6),
+							IdPropietario = reader.GetInt32(7),
 							Duenio = new Propietario
 							{
-								IdPropietario = reader.GetInt32(4),
-								Nombre = reader.GetString(5),
-								Apellido = reader.GetString(6),
+								IdPropietario = reader.GetInt32(7),
+								Nombre = reader.GetString(8),
+								Apellido = reader.GetString(9),
 							}
 						};
 					}

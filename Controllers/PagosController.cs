@@ -39,6 +39,7 @@ namespace InmobiliariaJanett.Controllers
         }
 
         // GET: PagosController/Details/5
+        [Authorize(Policy = "Administrador")]
         public ActionResult Details(int id)
         {
             var p = repositorio.ObtenerPorId(id);
@@ -46,6 +47,7 @@ namespace InmobiliariaJanett.Controllers
         }
 
         // GET: PagosController/Create
+        [Authorize]
         public ActionResult Create()
         {
 
@@ -57,6 +59,7 @@ namespace InmobiliariaJanett.Controllers
         // POST: PagosController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Policy = "Administrador")]
         public ActionResult Create(Pago pago)
         {
             try
@@ -92,6 +95,7 @@ namespace InmobiliariaJanett.Controllers
         // POST: PagosController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Policy = "Administrador")]
         public ActionResult Edit(int id, Pago entidad)
         {
             try
