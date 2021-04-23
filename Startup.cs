@@ -53,11 +53,12 @@ namespace InmobiliariaJanett
             services.AddTransient<IRepositorioInmueble, RepositorioInmuebles>();
             services.AddTransient<IRepositorioUsuario, RepositorioUsuario>();
             services.AddTransient<IRepositorioContrato, RepositorioContrato>();
+            services.AddTransient<IRepositorioPago, RepositorioPago>();
 
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
             // Habilitar CORS
             app.UseCors(x => x
@@ -76,7 +77,10 @@ namespace InmobiliariaJanett
             app.UseAuthentication();
             app.UseAuthorization();
             // App en ambiente de desarrollo?
-            
+            if (env.IsDevelopment())
+            {
+                app.UseDeveloperExceptionPage();//página amarilla de errores
+            }
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllerRoute("login", "login/{**accion}", new { controller = "Usuario", action = "Login" });

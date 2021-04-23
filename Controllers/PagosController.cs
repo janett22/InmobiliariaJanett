@@ -30,19 +30,21 @@ namespace InmobiliariaJanett.Controllers
         {
             try
             {
-                TempData["IdPago"] = id;
-                var lista = repositorio.BuscarPorContrato(id);
+
+                var lista = repositorio.ObtenerTodos();
                 if (TempData.ContainsKey("Id"))
                     ViewBag.Id = TempData["Id"];
                 if (TempData.ContainsKey("Mensaje"))
                     ViewBag.Mensaje = TempData["Mensaje"];
                 return View(lista);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 throw;
-            
+
             }
+
+
 
 
         }
@@ -56,7 +58,7 @@ namespace InmobiliariaJanett.Controllers
         }
 
         // GET: PagosController/Create
-        [Authorize]
+        
         public ActionResult Create()
         {
 
@@ -128,12 +130,21 @@ namespace InmobiliariaJanett.Controllers
         [Authorize(Policy = "Administrador")]
         public ActionResult Delete(int id)
         {
-            var entidad = repositorio.ObtenerPorId(id);
-            if (TempData.ContainsKey("Mensaje"))
-                ViewBag.Mensaje = TempData["Mensaje"];
-            if (TempData.ContainsKey("Error"))
-                ViewBag.Error = TempData["Error"];
-            return View(entidad);
+            try
+            {
+                var entidad = repositorio.ObtenerPorId(id);
+                TempData["IdCont"] = entidad.IdContrato;
+                if (TempData.ContainsKey("Mensaje"))
+                    ViewBag.Mensaje = TempData["Mensaje"];
+                if (TempData.ContainsKey("Error"))
+                    ViewBag.Error = TempData["Error"];
+                return View(entidad);
+            }
+            catch (Exception ex)
+            {
+
+                throw;
+            }
         }
 
         // POST: PagosController/Delete/5
@@ -142,19 +153,25 @@ namespace InmobiliariaJanett.Controllers
         [Authorize(Policy = "Administrador")]
         public ActionResult Delete(int id, Pago entidad)
         {
+
             try
             {
+                ViewBag.IdCont = TempData["IdCont"];
+                int idCont = ViewBag.IdCont;
+                entidad = repositorio.ObtenerPorId(id);
                 repositorio.Baja(id);
+
                 TempData["Mensaje"] = "Eliminación realizada correctamente";
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction("PorContrato", new { id = idCont });
             }
             catch (Exception ex)
             {
-                ViewBag.Error = ex.Message;
-                ViewBag.StackTrate = ex.StackTrace;
+                ViewBag.Error = " No se puede eliminar el Pago, ya que posee un Contrato asociado";
                 return View(entidad);
             }
+
         }
+
 
         public ActionResult PorContrato(int id)
         {

@@ -82,42 +82,40 @@ namespace InmobiliariaJanett.Models
         }
 
         public IList<Pago> ObtenerTodos()
+        {
+            IList<Pago> res = new List<Pago>();
+            using (SqlConnection connection = new SqlConnection(connectionString))
             {
-                IList<Pago> res = new List<Pago>();
-                using (SqlConnection connection = new SqlConnection(connectionString))
+                string sql = "SELECT p.Id, p.NroPago, p.Fecha, P.Importe, p.IdContrato, c.FechaInicio, c.FechaFin" +
+                    " FROM Pagos p  INNER JOIN Contratos c ON p.IdContrato = c.Id";
+                using (SqlCommand command = new SqlCommand(sql, connection))
                 {
-                    string sql = $"SELECT Id, NroPago, Fecha, Importe, IdContrato, c.FechaInicio, c.FechaFin" +
-                    $" FROM Pagos p INNER JOIN Contratos c ON p.IdContrato= c,Id" +
-                    $" WHERE Id=@id";
-                    using (SqlCommand command = new SqlCommand(sql, connection))
+                    command.CommandType = CommandType.Text;
+                    connection.Open();
+                    var reader = command.ExecuteReader();
+                    while (reader.Read())
                     {
-                        command.CommandType = CommandType.Text;
-                        connection.Open();
-                        var reader = command.ExecuteReader();
-                        while (reader.Read())
+                        Pago entidad = new Pago
                         {
-                            
-                            Pago entidad = new Pago
+                            Id = reader.GetInt32(0),
+                            NroPago = reader.GetInt32(1),
+                            Fecha = reader.GetDateTime(2),
+                            Importe = reader.GetDecimal(3),
+                            IdContrato = reader.GetInt32(4),
+                            contrato = new Contrato
                             {
-                                Id = reader.GetInt32(0),
-                                NroPago = reader.GetInt32(1),
-                                Fecha = reader.GetDateTime(2),
-                                Importe = reader.GetInt32(3),
-                                IdContrato = reader.GetInt32(4),
-                                contrato = new Contrato
-                                {
-                                    Id = reader.GetInt32(4),
-                                    FechaInicio = reader.GetDateTime(5),
-                                    FechaFin = reader.GetDateTime(6),
-                                }
-                            };
-                            res.Add(entidad);
-                        }
-                        connection.Close();
+                                Id = reader.GetInt32(4),
+                                FechaInicio = reader.GetDateTime(5),
+                                FechaFin = reader.GetDateTime(6),
+                            }
+                        };
+                        res.Add(entidad);
                     }
+                    connection.Close();
                 }
-                return res;
             }
+            return res;
+        }
 
 
         public Pago ObtenerPorId(int id)
@@ -126,9 +124,9 @@ namespace InmobiliariaJanett.Models
             Pago entidad = null;
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
-                string sql = $"SELECT Id, NroPago, Fecha, Importe, IdContrato, c.FechaInicio, c.FechaFin" +
-                    $" FROM Pagos p INNER JOIN Contratos c ON p.IdContrato= c,Id" +
-                    $" WHERE Id=@id";
+                string sql = "SELECT p.Id, p.NroPago, p.Fecha, P.Importe, p.IdContrato, c.FechaInicio, c.FechaFin" +
+                    " FROM Pagos p  INNER JOIN Contratos c ON p.IdContrato = c.Id" +
+                    $" WHERE p.Id=@id";
                 using (SqlCommand command = new SqlCommand(sql, connection))
                 {
                     command.Parameters.Add("@id", SqlDbType.Int).Value = id;
@@ -137,19 +135,21 @@ namespace InmobiliariaJanett.Models
                     var reader = command.ExecuteReader();
                     if (reader.Read())
                     {
-                        entidad = new Pago
+
+                       entidad = new Pago
                         {
                             Id = reader.GetInt32(0),
-                           NroPago = reader.GetInt32(1),
-                           Fecha = reader.GetDateTime(2),
-                            Importe = reader.GetInt32(3),
+                            NroPago = reader.GetInt32(1),
+                            Fecha = reader.GetDateTime(2),
+                            Importe = reader.GetDecimal(3),
                             IdContrato = reader.GetInt32(4),
                             contrato = new Contrato
                             {
-                                Id= reader.GetInt32(4),
+                                Id = reader.GetInt32(4),
                                 FechaInicio = reader.GetDateTime(5),
                                 FechaFin = reader.GetDateTime(6),
                             }
+
                         };
                     }
                     connection.Close();
@@ -164,9 +164,9 @@ namespace InmobiliariaJanett.Models
             Pago entidad = null;
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
-                string sql = $"SELECT p.Id,p.NroPago, p.FechaPago,p.Importe,p.ContratoId,c.InquilinoId,InmuebleId" +
-                    $" FROM Pago p INNER JOIN Contrato c ON p.ContratoId = c.Id" +
-                    $" WHERE ContratoId=@id";
+                string sql = $"SELECT p.Id,p.NroPago, p.Fecha,p.Importe,p.IdContrato,c.InquilinoId,InmuebleId" +
+                    $" FROM Pagos p INNER JOIN Contratos c ON p.IdContrato = c.Id" +
+                    $" WHERE IdContrato=@id";
                 using (SqlCommand command = new SqlCommand(sql, connection))
                 {
                     command.Parameters.Add("@id", SqlDbType.Int).Value = id;

@@ -4,7 +4,7 @@
    ViewData["Title"]="PorContrato" ;
           }
 
-<h2>REGISTRO DE PAGOS</h2>
+<h2>Registro de PagoS</h2>
 
 <table class="table">
     <thead class="thead-dark">
@@ -44,7 +44,8 @@
         <a asp-action="Edit" asp-route-id="@item.Id" title="Editar"><i class="fas fa-edit"></i></a>&nbsp;
         @if (ViewContext.HttpContext.User.IsInRole("Administrador"))
         {
-<a asp-action="Delete" asp-route-id="@item.Id" title="Eliminar"><i class="fas fa-trash-alt"></i></a>                }
+<a asp-action="Delete" asp-route-id="@item.Id" title="Eliminar"><i class="fas fa-trash-alt"></i></a>           
+        }
     </td>
 </tr>
 }
