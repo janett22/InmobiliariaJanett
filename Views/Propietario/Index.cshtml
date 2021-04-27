@@ -1,15 +1,16 @@
 ﻿@model IEnumerable<InmobiliariaJanett.Models.Propietario>
 
-@{ ViewData["Title"] = "Propietario"; }
+@{
+    ViewData["Title"] = "Index";
+}
 
-<h1>Propietarios</h1>
+<h1>Index</h1>
 
-<a asp-action="Create" class="btn btn-primary" style="width:180px;">Crear nuevo <i class="fas fa-plus"> </i></a>
-
-<br>
-<br>
+<p>
+    <a asp-action="Create" class="btn btn-primary">Create New</a>
+</p>
 <table class="table">
-    <thead class="thead-primary">
+    <thead>
         <tr>
             <th>
                 @Html.DisplayNameFor(model => model.IdPropietario)
@@ -36,36 +37,40 @@
         </tr>
     </thead>
     <tbody>
-        @foreach (var item in Model)
-        {
-<tr>
-    <td>
-        @Html.DisplayFor(modelItem => item.IdPropietario)
-    </td>
-    <td>
-        @Html.DisplayFor(modelItem => item.Nombre)
-    </td>
-    <td>
-        @Html.DisplayFor(modelItem => item.Apellido)
-    </td>
-    <td>
-        @Html.DisplayFor(modelItem => item.Dni)
-    </td>
-    <td>
-        @Html.DisplayFor(modelItem => item.Telefono)
-    </td>
-    <td>
-        @Html.DisplayFor(modelItem => item.Email)
-    </td>
-    <td>
-        @Html.DisplayFor(modelItem => item.clave)
-    </td>
-    <td>
-        @Html.ActionLink("Editar", "Edit", new { id = item.IdPropietario }) |
-        @Html.ActionLink("Detalles", "Details", new { id = item.IdPropietario }) |
-        @Html.ActionLink("Eliminar", "Delete", new { id = item.IdPropietario })
-    </td>
-</tr>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.IdPropietario)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Nombre)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Apellido)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Dni)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Telefono)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Email)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.clave)
+            </td>
+            <td>
+                <i class="fa fa-history"></i>
+                @Html.ActionLink("Ver Inmuebles", "IndexPorPropietario", "Inmuebles", new { id = item.IdPropietario }) |
+                <i class="fa fa-info-circle"></i>
+                @Html.ActionLink("Editar", "Edit", new { id = item.IdPropietario }) |
+                <i class="fa fa-info-circle"></i>
+                @Html.ActionLink("Detalles", "Details", new { id = item.IdPropietario }) |
+                <i class="fa fa-trash"></i>
+                @Html.ActionLink("Cancelar", "Delete", new { id = item.IdPropietario })
+            </td>
+        </tr>
 }
     </tbody>
 </table>

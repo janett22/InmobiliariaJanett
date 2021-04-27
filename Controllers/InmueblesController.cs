@@ -1,5 +1,6 @@
 ﻿using InmobiliariaJanett.Models;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
@@ -12,15 +13,19 @@ namespace InmobiliariaJanett.Controllers
 {
     public class InmueblesController : Controller
     {
-        private readonly RepositorioPropietario repositorioPropietario;
-        private readonly RepositorioInmuebles  repositorio;
-        private readonly IConfiguration configuration;
 
-        public InmueblesController(IConfiguration configuration)
+
+        private readonly IConfiguration configuration;
+        private readonly IWebHostEnvironment environment;
+        private readonly RepositorioPropietario repositorioPropietario;
+        private readonly IRepositorioInmueble  repositorio;
+
+        public InmueblesController(IConfiguration configuration, IWebHostEnvironment environment, IRepositorioInmueble repositorio)
         {
 
-            this.repositorio = new RepositorioInmuebles(configuration);
             this.repositorioPropietario = new RepositorioPropietario(configuration);
+            this.environment = environment;
+            this.repositorio = repositorio;
             this.configuration = configuration;
         }
 
@@ -36,7 +41,22 @@ namespace InmobiliariaJanett.Controllers
                 ViewBag.Mensaje = TempData["Mensaje"];
             return View(Inmuebles);
         }
+        [Authorize]
+        public ActionResult IndexPorPropietario(int id)
+        {
+            TempData["IdPro"] = id;
 
+            TempData["pro"] = id;
+
+            var lista = repositorio.BuscarPorPropietario(id);
+            if (TempData.ContainsKey("Id"))
+                ViewBag.Id = TempData["Id"];
+            if (TempData.ContainsKey("Mensaje"))
+                ViewBag.Mensaje = TempData["Mensaje"];
+
+            return View(lista);
+        }
+    
         // GET: InmueblesController/Details/5
         [Authorize(Policy = "Administrador")]
         public ActionResult Details(int id)
@@ -159,5 +179,57 @@ namespace InmobiliariaJanett.Controllers
                 return View(entidad);
             }
         }
+
+        [Authorize]
+        public ActionResult InmueblesDisponibles()
+        {
+            try
+            {
+                IList<Inmueble> lista = repositorio.BuscarDisponibles();
+                ViewData["Title"] = "INMUEBLES DISPONIBLES";
+                return View(nameof(Index), lista);
+
+            }
+            catch (Exception ex)
+            {
+                ViewBag.Error = ex.Message;
+                ViewBag.StackTrate = ex.StackTrace;
+                return RedirectToAction(nameof(Index));
+            }
+        }
+
+        [HttpPost]
+        [Authorize]
+        public ActionResult BuscarInmueblesPorFecha(BusquedaPorFechas busqueda)
+        {
+            try
+            {
+                var lista = repositorio.BuscarInmueblesDisponibles(busqueda.FechaInicio, busqueda.FechaFin);
+                ViewData["Title"] = "INMUEBLES DISPONIBLES";
+                ViewData["Title2"] = "Periodo: " + busqueda.FechaInicio.ToShortDateString() + "-" + busqueda.FechaFin.ToShortDateString();
+
+                if (TempData.ContainsKey("Id"))
+                    ViewBag.Id = TempData["Id"];
+                if (TempData.ContainsKey("Mensaje"))
+                    ViewBag.Mensaje = TempData["Mensaje"];
+
+
+                return View(nameof(Index), lista);
+
+            }
+            catch (Exception ex)
+            {
+                ViewBag.Error = ex.Message;
+                ViewBag.StackTrace = ex.StackTrace;
+                return View();
+               
+            }
+            
+        }
+
+
+
+
+
     }
 }

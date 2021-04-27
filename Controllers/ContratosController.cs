@@ -28,8 +28,8 @@ namespace InmobiliariaJanett.Controllers
 
             this.configuration = configuration;
         }
-    
-    // GET: ContratosController
+
+        // GET: ContratosController
         public ActionResult Index()
         {
 
@@ -41,6 +41,35 @@ namespace InmobiliariaJanett.Controllers
             return View(Con);
 
         }
+        
+
+        [Authorize]
+        public ActionResult IndexPorInmueble(int id)
+        {
+            try
+            {
+                TempData["IdInmueble"] = id;
+
+                ViewData["Title"] = "CONTRATOS DE ALQUILER";
+                IList<Contrato> lista = repositorioInmuebles.BuscarPorContrato(id);
+                if (TempData.ContainsKey("Id"))
+                    ViewBag.Id = TempData["Id"];
+                if (TempData.ContainsKey("Mensaje"))
+                    ViewBag.Mensaje = TempData["Mensaje"];
+
+                return View(lista);
+
+            }
+            catch (Exception ex)
+            {
+
+                ViewBag.Error = ex.Message;
+                ViewBag.StackTrate = ex.StackTrace;
+                return Redirect(nameof(Index));
+            }
+
+        }
+
 
         // GET: ContratosController/Details/5
         public ActionResult Details(int id)
@@ -52,7 +81,7 @@ namespace InmobiliariaJanett.Controllers
         // GET: ContratosController/Create
         public ActionResult Create()
         {
-            ViewBag.inmuebles= repositorioInmuebles.ObtenerTodos();
+           ViewBag.inmuebles= repositorioInmuebles.ObtenerTodos();
             ViewBag.inquilinos = repositorioInquilino.ObtenerTodos();
             return View();
         }
@@ -144,5 +173,35 @@ namespace InmobiliariaJanett.Controllers
                 return View(entidad);
             }
         }
+
+        [Authorize]
+        public ActionResult BuscarVigentes(BusquedaPorFechas busqueda)
+        {
+            try
+            {
+                IList<Contrato> entidad = repositorio.ContratosVigentes(busqueda.FechaInicio, busqueda.FechaFin);
+
+                if (entidad != null)
+                {
+                    ViewData["Title"] = "CONTRATOS VIGENTES";
+                    return View(nameof(Index), entidad);
+
+                }
+                else
+                {
+                    TempData["Mensaje"] = "El inmueble se encuentra ocupado en las fechas seleccionadas";
+                    return RedirectToAction(nameof(Index));
+                }
+            }
+            catch (Exception ex)
+            {
+                ViewBag.Error = ex.Message;
+                ViewBag.StackTrate = ex.StackTrace;
+                return RedirectToAction(nameof(Index));
+            }
+
+        }
+
+
     }
 }

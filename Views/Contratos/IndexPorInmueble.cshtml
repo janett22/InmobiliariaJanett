@@ -1,0 +1,67 @@
+﻿@model IEnumerable<InmobiliariaJanett.Models.Contrato>
+
+@{
+    ViewData["Title"] = "IndexPorInmueble";
+}
+
+<h1>Contratos</h1>
+
+<p>
+    <a asp-action="Create" class="btn btn-primary">Crear nuevo<i class="fas fa-plus"> </i></a>
+
+</p>
+<table class="table">
+    <thead class="thead-light">
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Id)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.FechaInicio)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.FechaFin)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Inquilino)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Inmueble.Direccion)
+            </th>
+
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Id)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.FechaInicio)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.FechaFin)
+            </td>
+            <td>
+                @(item.Inquilino.Nombre + " " + item.Inquilino.Apellido)
+            </td>
+
+            <td>
+                @Html.DisplayFor(modelItem => item.Inmueble.Direccion)
+            </td>
+            <td>
+            <a asp-action="Edit" asp-route-id="@item.Id" title="Editar"><i class="fas fa-edit"></i></a>&nbsp;
+            @if (ViewContext.HttpContext.User.IsInRole("Administrador"))
+            {
+        <a asp-action="Delete" asp-route-id="@item.Id" title="Eliminar"><i class="fas fa-trash-alt"></i></a>
+}
+            &nbsp;
+            <a asp-action="PorInmueble" asp-controller="Contrato" asp-route-id="@item.Id" title="Contratos"><i class="fas fa-file-signature"></i></a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

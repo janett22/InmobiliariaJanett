@@ -181,10 +181,66 @@ namespace InmobiliariaJanett.Models
             return entidad;
         }
 
+        public IList<Contrato> ContratosVigentes(DateTime fechaInicio, DateTime fechaFin)
+        {
+            IList<Contrato> res = new List<Contrato>();
+
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                string sql = "SELECT c.Id, c.FechaInicio, c.FechaFin, c.InquilinoId, i.Nombre, i.Apellido, c.InmuebleId, inm.direccion, inm.IdPropietario" +
+                              " FROM Contratos c INNER JOIN Inquilinos i ON i.IdInquilino = c.InquilinoId" +
+                              " INNER JOIN Inmuebles inm ON  inm.Id = c.InmuebleId" +
+                              " WHERE FechaInicio <= @fechaFin AND FechaFin >= @fechaInicio;";
+
+                using (SqlCommand command = new SqlCommand(sql, connection))
+                {
+                    command.Parameters.Add("@fechaInicio", SqlDbType.Date).Value = fechaInicio;
+                    command.Parameters.Add("@fechaFin", SqlDbType.Date).Value = fechaFin;
+                    command.CommandType = CommandType.Text;
+                    connection.Open();
+                    var reader = command.ExecuteReader();
+                    while (reader.Read())
+                    {
+                        Contrato entidad = new Contrato
+                        {
+                            Id = reader.GetInt32(0),
+                            FechaInicio = reader.GetDateTime(1),
+                            FechaFin = reader.GetDateTime(2),
+
+                            InquilinoId = reader.GetInt32(3),
+                            Inquilino = new Inquilino
+                            {
+                                IdInquilino = reader.GetInt32(3),
+                                Nombre = reader.GetString(4),
+                                Apellido = reader.GetString(5),
+                            },
+
+                            InmuebleId = reader.GetInt32(6),
+                            Inmueble = new Inmueble
+                            {
+                                Id = reader.GetInt32(6),
+                                Direccion = reader.GetString(7),
+                                IdPropietario = reader.GetInt32(8),
+                            }
+                        };
+
+                        res.Add(entidad);
+                    }
+                    connection.Close();
+                }
+            }
+
+
+            return res;
+        }
+
+
         public Inquilino ObtenerPorEmail(string email)
         {
             throw new NotImplementedException();
         }
+
+
     }
 
 }

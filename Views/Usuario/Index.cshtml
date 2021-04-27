@@ -1,18 +1,17 @@
 ﻿@model IEnumerable<InmobiliariaJanett.Models.Usuario>
 
-<h2>
-     @ViewBag.Title = "index";
-
-</h2>
-<BR>
+@{
+    ViewData["Title"] = "Index";
+    
+}
 
 <h1>Index</h1>
 
 <p>
-    <a asp-action="Create" class="btn btn-primary">Crear Nuevo</a>
+    <a asp-action="Create">Create New</a>
 </p>
 <table class="table">
-    <thead class="thead-light">
+    <thead>
         <tr>
             <th>
                 @Html.DisplayNameFor(model => model.Id)
@@ -27,43 +26,50 @@
                 @Html.DisplayNameFor(model => model.Email)
             </th>
             <th>
+                @Html.DisplayNameFor(model => model.Clave)
+            </th>
+            <th>
                 @Html.DisplayNameFor(model => model.Avatar)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Rol)
             </th>
+            <th>
+                @Html.DisplayNameFor(model => model.RolNombre)
+            </th>
             <th></th>
         </tr>
     </thead>
     <tbody>
-        @foreach (var item in Model)
-
-        {
-<tr>
-    <td>
-        @Html.DisplayFor(modelItem => item.Id)
-    </td>
-    <td>
-        @Html.DisplayFor(modelItem => item.Nombre)
-    </td>
-    <td>
-        @Html.DisplayFor(modelItem => item.Apellido)
-    </td>
-    <td>
-        @Html.DisplayFor(modelItem => item.Email)
-    </td>
-    <td>
-        <img width="32" src="@item.Avatar" />
-    </td>
-    <td>
-        @Html.DisplayFor(modelItem => item.RolNombre)
-    </td>
-    <td>
-        <a asp-action="Edit" asp-route-id="@item.Id" title="Editar"><span class="lnr lnr-pencil"></span></a>&nbsp;
-        <a asp-action="Delete" asp-route-id="@item.Id" title="Eliminar"><span class="lnr lnr-cross"></span></a>
-        <a asp-action="Details" asp-route-id="@item.Id" title="Detalles"><span class="lnr lnr-cross"></span></a>
-    </td>
-</tr>
+@foreach (var usuario in (IList<Usuario>)ViewBag.usuarios) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => usuario.Id)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => usuario.Nombre)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => usuario.Apellido)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => usuario.Email)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem =>usuario.Avatar)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => usuario.Rol)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => usuario.RolNombre)
+            </td>
+            <td>
+                @Html.ActionLink("Edit", "Edit", new { id=usuario.Id }) |
+                @Html.ActionLink("Details", "Details", new { id = usuario.Id }) |
+                @Html.ActionLink("Delete", "Delete", new { id=usuario.Id })
+            </td>
+        </tr>
 }
     </tbody>
 </table>

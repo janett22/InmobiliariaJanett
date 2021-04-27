@@ -5,8 +5,12 @@ using System.Threading.Tasks;
 
 namespace InmobiliariaJanett.Models
 {
-    interface IRepositorioInmueble : IRepositorio<Inmueble>
+    public interface IRepositorioInmueble : IRepositorio<Inmueble>
     {
-        Inquilino ObtenerPorEmail(string email);
+        IList<Inmueble> BuscarPorPropietario(int idPropietario);
+        IList<Contrato> BuscarPorContrato(int idInmueble);
+        int Alta(Inmueble e, int id);
+        IList<Inmueble> BuscarDisponibles();
+        IList<Inmueble> BuscarInmueblesDisponibles(DateTime inicio, DateTime fin);
     }
 }
