@@ -8,5 +8,6 @@ namespace InmobiliariaJanett.Models
    public interface IRepositorioPago : IRepositorio<Pago>
     {
         IList<Pago> BuscarPorContrato(int id);
+        int Alta(Pago entidad, int id);
     }
 }

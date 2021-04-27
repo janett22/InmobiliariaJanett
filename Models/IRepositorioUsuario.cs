@@ -8,6 +8,10 @@ namespace InmobiliariaJanett.Models
     public interface IRepositorioUsuario: IRepositorio<Usuario>
     {
         Usuario ObtenerPorEmail(string email);
+
+
+        public int usuarioConFoto(Usuario u);
+        
     
     }
 }

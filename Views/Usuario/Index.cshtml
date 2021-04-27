@@ -1,20 +1,27 @@
 ﻿@model IEnumerable<InmobiliariaJanett.Models.Usuario>
 
-
 <h2>
-    @ViewBag.Title
+     @ViewBag.Title = "index";
+
 </h2>
 <BR>
 
-<a asp-action="Create" class="btn btn-dark" style="width:180px;">Crear nuevo <i class="fas fa-plus"> </i></a>
+<h1>Index</h1>
 
-<br>
-<br>
+<p>
+    <a asp-action="Create" class="btn btn-primary">Crear Nuevo</a>
+</p>
 <table class="table">
-    <thead class="thead-dark">
+    <thead class="thead-light">
         <tr>
             <th>
+                @Html.DisplayNameFor(model => model.Id)
+            </th>
+            <th>
                 @Html.DisplayNameFor(model => model.Nombre)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Apellido)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Email)
@@ -22,36 +29,41 @@
             <th>
                 @Html.DisplayNameFor(model => model.Avatar)
             </th>
-
             <th>
-                @Html.DisplayNameFor(model => model.RolNombre)
+                @Html.DisplayNameFor(model => model.Rol)
             </th>
             <th></th>
         </tr>
-        </>
+    </thead>
     <tbody>
         @foreach (var item in Model)
-        {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Nombre)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Email)
-            </td>
-            <td>
-                <img width="32" src="@item.Avatar" />
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.RolNombre)
-            </td>
 
-            <td>
-                @Html.ActionLink("Editar", "Edit", new { id = item.Id }) |
-                @Html.ActionLink("Detalles", "Details", new { id = item.Id }) |
-                @Html.ActionLink("Eliminar", "Delete", new { id = item.Id })
-            </td>
-        </tr>
-        }
+        {
+<tr>
+    <td>
+        @Html.DisplayFor(modelItem => item.Id)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.Nombre)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.Apellido)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.Email)
+    </td>
+    <td>
+        <img width="32" src="@item.Avatar" />
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.RolNombre)
+    </td>
+    <td>
+        <a asp-action="Edit" asp-route-id="@item.Id" title="Editar"><span class="lnr lnr-pencil"></span></a>&nbsp;
+        <a asp-action="Delete" asp-route-id="@item.Id" title="Eliminar"><span class="lnr lnr-cross"></span></a>
+        <a asp-action="Details" asp-route-id="@item.Id" title="Detalles"><span class="lnr lnr-cross"></span></a>
+    </td>
+</tr>
+}
     </tbody>
 </table>

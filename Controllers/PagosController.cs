@@ -26,7 +26,7 @@ namespace InmobiliariaJanett.Controllers
         }
 
         // GET: PagosController
-        public ActionResult Index(int id)
+        public ActionResult Index()
         {
             try
             {
@@ -38,14 +38,11 @@ namespace InmobiliariaJanett.Controllers
                     ViewBag.Mensaje = TempData["Mensaje"];
                 return View(lista);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 throw;
 
             }
-
-
-
 
         }
 
@@ -58,43 +55,62 @@ namespace InmobiliariaJanett.Controllers
         }
 
         // GET: PagosController/Create
-        
+
         public ActionResult Create()
         {
+            try
+            {
+                IList<Contrato> lista = repositorioCont.ObtenerTodos();
+                ViewBag.Contrato = lista;
+                return View();
 
-            ViewBag.Contratos = repositorioCont.ObtenerTodos();
-            ViewBag.Pagos = repositorio.ObtenerTodos();
-            return View();
+       
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+            
+            
         }
 
         // POST: PagosController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Policy = "Administrador")]
-        public ActionResult Create(Pago pago)
+        public ActionResult Create(Pago entidad)
         {
             try
             {
-                repositorio.Alta(pago);
-                TempData["Id"] = "Se creo el Pago";
-                return RedirectToAction(nameof(Index));
+                if (ModelState.IsValid)
+                {
+                    repositorio.Alta(entidad);
+                    TempData["Id"] = entidad.Id;
+                    ViewBag.Contrato = entidad;
 
+                    IList<Contrato> lista = repositorioCont.ObtenerTodos();
+                    return RedirectToAction("Index");
+                }
+                else
+                {
+                    ViewBag.Contrato = repositorioCont.ObtenerTodos();
+                    return View(entidad);
+                }
             }
             catch (Exception ex)
             {
-                ViewBag.Contratos = repositorioCont.ObtenerTodos();
                 ViewBag.Error = ex.Message;
-                ViewBag.StackTrate = ex.StackTrace;
-                return View(pago);
+                ViewBag.StackTrace = ex.StackTrace;
+                return View(entidad);
             }
         }
-
+        
         // GET: PagosController/Edit/5
-        public ActionResult Edit(int id)
+            public ActionResult Edit(int id)
         {
 
             var entidad = repositorio.ObtenerPorId(id);
-            ViewBag.Inquilinos = repositorioCont.ObtenerTodos();
+            ViewBag.Contratos  = repositorioCont.ObtenerTodos();
             if (TempData.ContainsKey("Mensaje"))
                 ViewBag.Mensaje = TempData["Mensaje"];
             if (TempData.ContainsKey("Error"))
@@ -175,6 +191,33 @@ namespace InmobiliariaJanett.Controllers
 
         public ActionResult PorContrato(int id)
         {
+            try
+            {
+
+                TempData["ContId"] = id;
+                TempData["IdPago"] = id;
+                var lista = repositorio.BuscarPorContrato(id);
+                IList<Contrato> contratos = repositorioCont.ObtenerTodos();
+                ViewBag.Pagos = lista;
+                if (TempData.ContainsKey("Id"))
+                    ViewBag.Id = TempData["Id"];
+                if (TempData.ContainsKey("Mensaje"))
+                    ViewBag.Mensaje = TempData["Mensaje"];
+
+                return View(lista);
+            }
+            catch (Exception ex)
+            {
+                ViewBag.Error = ex.Message;
+                ViewBag.StackTrate = ex.StackTrace;
+                return View();
+   
+            }
+        }
+
+
+        public ActionResult pagar(int id)
+        {
             TempData["ContId"] = id;
             TempData["IdPago"] = id;
             var lista = repositorio.BuscarPorContrato(id);
@@ -182,10 +225,9 @@ namespace InmobiliariaJanett.Controllers
                 ViewBag.Id = TempData["Id"];
             if (TempData.ContainsKey("Mensaje"))
                 ViewBag.Mensaje = TempData["Mensaje"];
+
             return View(lista);
         }
-
-
 
 
     }

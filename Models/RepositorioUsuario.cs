@@ -20,20 +20,24 @@ namespace InmobiliariaJanett.Models
 			int res = -1;
 			using (SqlConnection connection = new SqlConnection(connectionString))
 			{
-				string sql = $"INSERT INTO Usuarios (Nombre, Apellido, Avatar, Email, Clave, Rol) " +
-					$"VALUES (@nombre, @apellido, @avatar, @email, @clave, @rol);" +
+				string sql = $"INSERT INTO Usuarios (Nombre, Apellido,Email, Clave, Avatar, Rol) " +
+					$"VALUES (@nombre, @apellido, @email, @clave, @avatar, @rol);" +
 					"SELECT SCOPE_IDENTITY();";//devuelve el id insertado (LAST_INSERT_ID para mysql)
 				using (SqlCommand command = new SqlCommand(sql, connection))
 				{
 					command.CommandType = CommandType.Text;
 					command.Parameters.AddWithValue("@nombre", u.Nombre);
 					command.Parameters.AddWithValue("@apellido",u.Apellido);
-					if (String.IsNullOrEmpty(u.Avatar))
-						command.Parameters.AddWithValue("@avatar", DBNull.Value);
-					else
-						command.Parameters.AddWithValue("@avatar", u.Avatar);
 					command.Parameters.AddWithValue("@email", u.Email);
 					command.Parameters.AddWithValue("@clave", u.Clave);
+					if (String.IsNullOrEmpty(u.Avatar))
+					{
+						command.Parameters.AddWithValue("@avatar", DBNull.Value);
+					}
+					else
+					{
+						command.Parameters.AddWithValue("@avatar", u.Avatar);
+					}
 					command.Parameters.AddWithValue("@rol", u.Rol);
 					connection.Open();
 					res = Convert.ToInt32(command.ExecuteScalar());
@@ -83,12 +87,38 @@ namespace InmobiliariaJanett.Models
 			return res;
 		}
 
+
+		public int usuarioConFoto(Usuario u)
+		{
+			int res = -1;
+			using (SqlConnection connection = new SqlConnection(connectionString))
+			{
+				string sql = $"UPDATE Usuarios SET Nombre=@nombre, Apellido=@apellido, Email=@email, Clave=@clave, Avatar=@avatar, Rol=@rol " +
+					$"WHERE Id = @id";
+				using (SqlCommand command = new SqlCommand(sql, connection))
+				{
+					command.CommandType = CommandType.Text;
+					command.Parameters.AddWithValue("@nombre", u.Nombre);
+					command.Parameters.AddWithValue("@apellido", u.Apellido);
+					command.Parameters.AddWithValue("@email", u.Email);
+					command.Parameters.AddWithValue("@clave", u.Clave);
+					command.Parameters.AddWithValue("@avatar", u.Avatar);
+					command.Parameters.AddWithValue("@rol", u.Rol);
+					command.Parameters.AddWithValue("@id", u.Id);
+					connection.Open();
+					res = command.ExecuteNonQuery();
+					connection.Close();
+				}
+			}
+			return res;
+		}
+
 		public IList<Usuario> ObtenerTodos()
 		{
 			IList<Usuario> res = new List<Usuario>();
 			using (SqlConnection connection = new SqlConnection(connectionString))
 			{
-				string sql = $"SELECT Id, Nombre, Apellido, Avatar, Email, Clave, Rol" +
+				string sql = $"SELECT Id, Nombre, Apellido, Email, Clave, Avatar, Rol" +
 					$" FROM Usuarios";
 				using (SqlCommand command = new SqlCommand(sql, connection))
 				{
@@ -97,24 +127,23 @@ namespace InmobiliariaJanett.Models
 					var reader = command.ExecuteReader();
 					while (reader.Read())
 					{
-						Usuario entidad = new Usuario
+						Usuario e = new Usuario
 						{
 							Id = reader.GetInt32(0),
 							Nombre = reader.GetString(1),
 							Apellido = reader.GetString(2),
+							Email = reader.GetString(3),
+							Clave = reader.GetString(4),
 							Avatar = reader["Avatar"].ToString(),
-							Email = reader.GetString(4),
-							Clave = reader.GetString(5),
 							Rol = reader.GetInt32(6),
 						};
-						res.Add(entidad);
+						res.Add(e);
 					}
 					connection.Close();
 				}
 			}
 			return res;
 		}
-
 		public Usuario ObtenerPorId(int id)
 		{
 			Usuario entidad = null;

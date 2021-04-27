@@ -5,10 +5,12 @@
 <h1>Inquilino</h1>
 
 <p>
-    <a asp-action="Create">Crear Nuevo</a>
-</p>
+    <a asp-action="Create" class="btn btn-primary" style="width:180px;">Crear nuevo <i class="fas fa-plus"> </i></a>
+
+<br>
+<br>
 <table class="table">
-    <thead>
+    <thead class="thead-light">
         <tr>
             <th>
                 @Html.DisplayNameFor(model => model.IdInquilino)

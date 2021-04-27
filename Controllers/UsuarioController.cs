@@ -32,14 +32,22 @@ namespace InmobiliariaJanett.Controllers
         // GET: Usuario
         [Authorize(Policy = "Administrador")]
         public ActionResult Index()
+        
         {
-            var usuarios = repositorio.ObtenerTodos();
-            ViewBag.Id = TempData["Id"];
-            if (TempData.ContainsKey("Id"))
-                ViewBag.Id = TempData["Id"];
-            if (TempData.ContainsKey("Mensaje"))
-                ViewBag.Mensaje = TempData["Mensaje"];
-            return View(usuarios);
+            try
+            {
+                IList<Usuario> lista = repositorio.ObtenerTodos();
+                ViewBag.usuarios = lista;
+                return View(lista);
+            }
+            catch (Exception ex)
+            {
+
+                ViewBag.Error = ex.Message;
+                ViewBag.StackTrate = ex.StackTrace;
+                return View();
+            }
+           
         }
 
         // GET: Usuario/Details/5
@@ -53,9 +61,20 @@ namespace InmobiliariaJanett.Controllers
         [Authorize(Policy = "Administrador")]
         public ActionResult Create()
         {
-            ViewBag.Roles = Usuario.ObtenerRoles();
-            return View();
-        }
+            try
+            {
+                ViewBag.Roles = Usuario.ObtenerRoles();
+                return View();
+
+
+            }
+            catch (Exception ex)
+            {
+                ViewBag.Error = ex.Message;
+                ViewBag.StackTrace = ex.StackTrace;
+                return View();
+                           }
+           }
 
         // POST: Usuario/Create
         [HttpPost]
@@ -88,17 +107,19 @@ namespace InmobiliariaJanett.Controllers
                     //Path.GetFileName(u.AvatarFile.FileName);//este nombre se puede repetir
                     string fileName = "avatar_" + u.Id + Path.GetExtension(u.AvatarFile.FileName);
                     string pathCompleto = Path.Combine(path, fileName);
-                    u.Avatar = Path.Combine("/Uploads", fileName);
+                    u.Avatar = Path.Combine("/Uploads/", fileName);
                     using (FileStream stream = new FileStream(pathCompleto, FileMode.Create))
                     {
                         u.AvatarFile.CopyTo(stream);
                     }
-                    repositorio.Modificacion(u);
+                    repositorio.usuarioConFoto(u);
                 }
                 return RedirectToAction(nameof(Index));
             }
             catch (Exception ex)
             {
+                ViewBag.Error = ex.Message;
+                ViewBag.StackTrace = ex.StackTrace;
                 ViewBag.Roles = Usuario.ObtenerRoles();
                 return View();
             }

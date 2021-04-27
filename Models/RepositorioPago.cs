@@ -15,7 +15,7 @@ namespace InmobiliariaJanett.Models
 
         }
 
-        public int Alta(Pago entidad)
+        public int Alta(Pago entidad, int id)
         {
             int res = -1;
             using (SqlConnection connection = new SqlConnection(connectionString))
@@ -86,30 +86,66 @@ namespace InmobiliariaJanett.Models
             IList<Pago> res = new List<Pago>();
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
-                string sql = "SELECT p.Id, p.NroPago, p.Fecha, P.Importe, p.IdContrato, c.FechaInicio, c.FechaFin" +
-                    " FROM Pagos p  INNER JOIN Contratos c ON p.IdContrato = c.Id";
-                using (SqlCommand command = new SqlCommand(sql, connection))
+                string sql = "Select c.Id, c.FechaInicio, c.FechaFin, c.InquilinoId, c.InmuebleId, i.Nombre, i.Apellido, " +
+                             " inm.Direccion, inm.IdPropietario, " +
+                             " p.Nombre, p.Apellido, pa.id, pa.NroPago, pa.Fecha, pa.Importe, pa.IdContrato, c.Precio " +
+                             " FROM Contratos c " +
+                             " INNER JOIN Inquilinos i ON i.IdInquilino = c.InquilinoId " +
+                             " INNER JOIN Inmuebles inm ON inm.Id = c.InmuebleId " +
+                             " INNER JOIN Propietarios p ON p.IdPropietario = inm.IdPropietario " +
+                             " INNER JOIN Pagos pa ON pa.IdContrato = c.Id ";
+
+ using (SqlCommand command = new SqlCommand(sql, connection))
                 {
                     command.CommandType = CommandType.Text;
                     connection.Open();
                     var reader = command.ExecuteReader();
                     while (reader.Read())
                     {
-                        Pago entidad = new Pago
+                        Pago pago = new Pago
                         {
-                            Id = reader.GetInt32(0),
-                            NroPago = reader.GetInt32(1),
-                            Fecha = reader.GetDateTime(2),
-                            Importe = reader.GetDecimal(3),
-                            IdContrato = reader.GetInt32(4),
-                            contrato = new Contrato
+                            Id = reader.GetInt32(11),
+                            NroPago = reader.GetInt32(12),
+                            Fecha = reader.GetDateTime(13),
+                            Importe = reader.GetDecimal(14),
+                            IdContrato = reader.GetInt32(0),
+
+                            Contrato = new Contrato
                             {
-                                Id = reader.GetInt32(4),
-                                FechaInicio = reader.GetDateTime(5),
-                                FechaFin = reader.GetDateTime(6),
-                            }
+                                Id = reader.GetInt32(0),
+                                FechaInicio = reader.GetDateTime(1),
+                                FechaFin = reader.GetDateTime(2),
+                                Precio = reader.GetDecimal(16),
+                                InquilinoId = reader.GetInt32(3),
+                                InmuebleId = reader.GetInt32(4),
+
+                                Inquilino = new Inquilino
+                                {
+                                    IdInquilino = reader.GetInt32(3),
+                                    Nombre = reader.GetString(5),
+                                    Apellido = reader.GetString(6),
+                                },
+
+                                Inmueble = new Inmueble
+                                {
+                                    Id = reader.GetInt32(4),
+                                    Direccion = reader.GetString(7),
+                                    IdPropietario = reader.GetInt32(8),
+
+                                    Duenio = new Propietario
+                                    {
+                                        IdPropietario = reader.GetInt32(8),
+                                        Nombre = reader.GetString(9),
+                                        Apellido = reader.GetString(10),
+                                    }
+                                }
+                            },
+
+
+
+
                         };
-                        res.Add(entidad);
+                        res.Add(pago);
                     }
                     connection.Close();
                 }
@@ -117,16 +153,20 @@ namespace InmobiliariaJanett.Models
             return res;
         }
 
-
         public Pago ObtenerPorId(int id)
         {
 
             Pago entidad = null;
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
-                string sql = "SELECT p.Id, p.NroPago, p.Fecha, P.Importe, p.IdContrato, c.FechaInicio, c.FechaFin" +
-                    " FROM Pagos p  INNER JOIN Contratos c ON p.IdContrato = c.Id" +
-                    $" WHERE p.Id=@id";
+                string sql = "Select c.Id, c.FechaInicio, c.FechaFin, c.InquilinoId, c.InmuebleId, i.Nombre, i.Apellido, " +
+                                " inm.Direccion, inm.IdPropietario, " +
+                                " p.Nombre, p.Apellido, pa.id, pa.NroPago, pa.Fecha, pa.Importe, pa.IdContrato" +
+                                " FROM Contratos c " +
+                                " INNER JOIN Inquilinos i ON i.IdInquilino = c.InquilinoId " +
+                                " INNER JOIN Inmuebles inm ON inm.Id = c.InmuebleId " +
+                                " INNER JOIN Propietarios p ON p.IdPropietario = inm.IdPropietario " +
+                                " INNER JOIN Pagos pa ON pa.IdContrato = c.Id ";
                 using (SqlCommand command = new SqlCommand(sql, connection))
                 {
                     command.Parameters.Add("@id", SqlDbType.Int).Value = id;
@@ -135,21 +175,43 @@ namespace InmobiliariaJanett.Models
                     var reader = command.ExecuteReader();
                     if (reader.Read())
                     {
-
-                       entidad = new Pago
+                        entidad = new Pago
                         {
-                            Id = reader.GetInt32(0),
-                            NroPago = reader.GetInt32(1),
-                            Fecha = reader.GetDateTime(2),
-                            Importe = reader.GetDecimal(3),
-                            IdContrato = reader.GetInt32(4),
-                            contrato = new Contrato
-                            {
-                                Id = reader.GetInt32(4),
-                                FechaInicio = reader.GetDateTime(5),
-                                FechaFin = reader.GetDateTime(6),
-                            }
+                            Id = reader.GetInt32(11),
+                            NroPago = reader.GetInt32(12),
+                            Fecha = reader.GetDateTime(13),
+                            Importe = reader.GetDecimal(14),
+                            IdContrato = reader.GetInt32(0),
 
+                            Contrato = new Contrato
+                            {
+                                Id = reader.GetInt32(0),
+                                FechaInicio = reader.GetDateTime(1),
+                                FechaFin = reader.GetDateTime(2),
+                                InquilinoId = reader.GetInt32(3),
+                                InmuebleId = reader.GetInt32(4),
+
+                                Inquilino = new Inquilino
+                                {
+                                    IdInquilino = reader.GetInt32(3),
+                                    Nombre = reader.GetString(5),
+                                    Apellido = reader.GetString(6),
+                                },
+
+                                Inmueble = new Inmueble
+                                {
+                                    Id = reader.GetInt32(4),
+                                    Direccion = reader.GetString(7),
+                                    IdPropietario = reader.GetInt32(8),
+
+                                    Duenio = new Propietario
+                                    {
+                                        IdPropietario = reader.GetInt32(8),
+                                        Nombre = reader.GetString(9),
+                                        Apellido = reader.GetString(10),
+                                    }
+                                }
+                            },
                         };
                     }
                     connection.Close();
@@ -164,9 +226,14 @@ namespace InmobiliariaJanett.Models
             Pago entidad = null;
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
-                string sql = $"SELECT p.Id,p.NroPago, p.Fecha,p.Importe,p.IdContrato,c.InquilinoId,InmuebleId" +
-                    $" FROM Pagos p INNER JOIN Contratos c ON p.IdContrato = c.Id" +
-                    $" WHERE IdContrato=@id";
+                string sql = "Select c.Id, c.FechaInicio, c.FechaFin, c.InquilinoId, c.InmuebleId, i.Nombre, i.Apellido, " +
+                                " inm.Direccion, inm.IdPropietario, " +
+                                " p.Nombre, p.Apellido, pa.id, pa.NroPago, pa.Fecha, pa.Importe, pa.IdContrato" +
+                                " FROM Contratos c " +
+                                " INNER JOIN Inquilinos i ON i.IdInquilino = c.InquilinoId " +
+                                " INNER JOIN Inmuebles inm ON inm.Id = c.InmuebleId " +
+                                " INNER JOIN Propietarios p ON p.IdPropietario = inm.IdPropietario " +
+                                " INNER JOIN Pagos pa ON pa.IdContrato = c.Id ";
                 using (SqlCommand command = new SqlCommand(sql, connection))
                 {
                     command.Parameters.Add("@id", SqlDbType.Int).Value = id;
@@ -177,24 +244,74 @@ namespace InmobiliariaJanett.Models
                     {
                         entidad = new Pago
                         {
-                            Id = reader.GetInt32(0),
-                            NroPago = reader.GetInt32(1),
-                            Fecha = reader.GetDateTime(2),
-                            Importe = reader.GetDecimal(3),
-                            IdContrato = reader.GetInt32(4),
-                             contrato = new Contrato
+                            Id = reader.GetInt32(11),
+                            NroPago = reader.GetInt32(12),
+                            Fecha = reader.GetDateTime(13),
+                            Importe = reader.GetDecimal(14),
+                            IdContrato = reader.GetInt32(0),
+
+                            Contrato = new Contrato
                             {
-                                Id = reader.GetInt32(4),
-                                InquilinoId = reader.GetInt32(5),
-                                InmuebleId = reader.GetInt32(6),
-                            }
+                                Id = reader.GetInt32(0),
+                                FechaInicio = reader.GetDateTime(1),
+                                FechaFin = reader.GetDateTime(2),
+                                InquilinoId = reader.GetInt32(3),
+                                InmuebleId = reader.GetInt32(4),
+
+                                Inquilino = new Inquilino
+                                {
+                                    IdInquilino = reader.GetInt32(3),
+                                    Nombre = reader.GetString(5),
+                                    Apellido = reader.GetString(6),
+                                },
+
+                                Inmueble = new Inmueble
+                                {
+                                    Id = reader.GetInt32(4),
+                                    Direccion = reader.GetString(7),
+                                    IdPropietario = reader.GetInt32(8),
+
+                                    Duenio = new Propietario
+                                    {
+                                        IdPropietario = reader.GetInt32(8),
+                                        Nombre = reader.GetString(9),
+                                        Apellido = reader.GetString(10),
+                                    }
+                                }
+                            },
                         };
-                        res.Add(entidad);
                     }
+                    res.Add(entidad);
+                    }
+                    connection.Close();
+            }
+            return res;
+        }
+
+        public int Alta(Pago p)
+        {
+            int res = -1;
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                string sql = $"INSERT INTO Pagos (IdContrato,NroPago,Fecha,Importe) " +
+                    "VALUES (@idContrato, @nroPago, @fecha, @importe);" +
+                    "SELECT SCOPE_IDENTITY();";//devuelve el id insertado (LAST_INSERT_ID para mysql)
+                using (var command = new SqlCommand(sql, connection))
+                {
+                    command.CommandType = CommandType.Text;
+                    command.Parameters.AddWithValue("@idContrato", p.IdContrato);
+                    command.Parameters.AddWithValue("@nroPago", p.NroPago);
+                    command.Parameters.AddWithValue("@fecha", p.Fecha);
+                    command.Parameters.AddWithValue("@importe", p.Importe);
+                    connection.Open();
+                    res = Convert.ToInt32(command.ExecuteScalar());
+                    p.Id = res;
                     connection.Close();
                 }
             }
             return res;
+
         }
     }
 }
+
