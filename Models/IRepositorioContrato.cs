@@ -7,6 +7,7 @@ namespace InmobiliariaJanett.Models
 {
    public interface IRepositorioContrato : IRepositorio<Contrato>
     {
-        Inquilino ObtenerPorEmail(string email);
+        
+        IList<Contrato> ContratosVigentes(DateTime inicio, DateTime fin);
     }
 }
