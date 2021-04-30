@@ -74,11 +74,22 @@ namespace InmobiliariaJanett.Controllers
         [Authorize(Policy = "Administrador")]
         public ActionResult Create()
         {
+            try
+            {
+                ViewBag.IdPro = TempData["IdPro"];
+                TempData["Pro"] = TempData["IdPro"];
+                ViewBag.Propietarios = repositorioPropietario.ObtenerTodos();
+                ViewBag.Usos = Inmueble.ObtenerUsos();
+                ViewBag.Tipos = Inmueble.ObtenerTipos();
+                return View();
+            }
+            catch (Exception ex)
+            {
+                ViewBag.Error = ex.Message;
+                return View();
 
-            ViewBag.Propietarios = repositorioPropietario.ObtenerTodos();
-            ViewBag.Usos = Inmueble.ObtenerUsos();
-            ViewBag.Tipos = Inmueble.ObtenerTipos();
-            return View();
+            }
+
         }
 
         // POST: InmueblesController/Create
@@ -87,16 +98,22 @@ namespace InmobiliariaJanett.Controllers
         [Authorize(Policy = "Administrador")]
         public ActionResult Create(Inmueble entidad)
         {
+            ViewBag.IdPro = TempData["Pro"];
+            int id = ViewBag.IdPro;
+
             try
             {
                 if (ModelState.IsValid)
                 {
                     repositorio.Alta(entidad);
                     TempData["Id"] = entidad.Id;
+                    TempData["Mensaje"] = "Datos guardados correctamente";
+
                     return RedirectToAction(nameof(Index));
                 }
                 else
                 {
+                    ViewBag.Inmueble = repositorio.ObtenerTodos();
                     ViewBag.Propietarios = repositorioPropietario.ObtenerTodos();
                     ViewBag.Usos = Inmueble.ObtenerUsos();
                     ViewBag.Tipos = Inmueble.ObtenerTipos();
@@ -157,6 +174,7 @@ namespace InmobiliariaJanett.Controllers
         public ActionResult Delete(int id)
         {
             var entidad = repositorio.ObtenerPorId(id);
+            TempData["IdPro"] = entidad.IdPropietario;
             if (TempData.ContainsKey("Mensaje"))
                 ViewBag.Mensaje = TempData["Mensaje"];
             if (TempData.ContainsKey("Error"))
@@ -173,6 +191,7 @@ namespace InmobiliariaJanett.Controllers
         {
             try
             {
+
                 ViewBag.IdPro = TempData["IdPro"];
                 entidad = repositorio.ObtenerPorId(id);
                 int idPro = ViewBag.IdPro;

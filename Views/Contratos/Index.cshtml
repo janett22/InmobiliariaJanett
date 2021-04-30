@@ -55,44 +55,45 @@
             <th>
                 @Html.DisplayNameFor(model => model.Inmueble.Direccion)
             </th>
-
+           
             <th></th>
         </tr>
     </thead>
     <tbody>
         @foreach (var item in Model)
         {
-<tr>
-    <td>
-        @Html.DisplayFor(modelItem => item.Id)
-    </td>
-    <td>
-        @Html.DisplayFor(modelItem => item.FechaInicio)
-    </td>
-    <td>
-        @Html.DisplayFor(modelItem => item.FechaFin)
-    </td>
-    <td>
-        @(item.Inquilino.Nombre + " " + item.Inquilino.Apellido)
-    </td>
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Id)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.FechaInicio)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.FechaFin)
+            </td>
+            <td>
+                @(item.Inquilino.Nombre + " " + item.Inquilino.Apellido)
+            </td>
 
-    <td>
-        @Html.DisplayFor(modelItem => item.Inmueble.Direccion)
-    </td>
-    <td>
-        <a asp-action="Create" asp-route-id="@item.Id" asp-controller="Pagos" title="Pagar"><i class="fas fa-plus"> </a>&nbsp;
-        <a asp-action="Edit" asp-route-id="@item.Id" title="Editar"><i class="fas fa-edit"></i></a>&nbsp;
-        <a asp-action="Details" asp-route-id="@item.Id" title="Detalles"><i class="fas fa-history"></i></a>&nbsp;
+            <td>
+                @Html.DisplayFor(modelItem => item.Inmueble.Direccion)
+            </td>
 
-        @if (ViewContext.HttpContext.User.IsInRole("Administrador"))
-        {
-<a asp-action="Delete" asp-route-id="@item.Id" title="Eliminar"><i class="fas fa-trash-alt"></i></a>} &nbsp;
+            <td>
+                <a asp-action="Create" asp-route-id="@item.Id" asp-controller="Pagos" title="Pagar"><i class="fas fa-plus"> </a>&nbsp;
+                <a asp-action="Edit" asp-route-id="@item.Id" title="Editar"><i class="fas fa-edit"></i></a>&nbsp;
+                <a asp-action="Details" asp-route-id="@item.Id" title="Detalles"><i class="fas fa-history"></i></a>&nbsp;
 
-        <a asp-action="PorContrato" asp-controller="Pagos" asp-route-id="@item.Id" title="Ver Pagos"><i class="fas fa-file-signature"></i></a>
+                @if (ViewContext.HttpContext.User.IsInRole("Administrador"))
+                {
+        <a asp-action="Delete" asp-route-id="@item.Id" title="Eliminar"><i class="fas fa-trash-alt"></i></a>} &nbsp;
 
-    </td>
+                <a asp-action="PorContrato" asp-controller="Pagos" asp-route-id="@item.Id" title="Ver Pagos"><i class="fas fa-file-signature"></i></a>
 
-</tr>}
+            </td>
+
+        </tr>}
     </tbody>
 </table>
 

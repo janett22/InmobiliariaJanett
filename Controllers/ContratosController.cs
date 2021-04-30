@@ -103,7 +103,6 @@ namespace InmobiliariaJanett.Controllers
                 ViewBag.Inmuebles = repositorioInmuebles.ObtenerTodos();
                 ViewBag.inquilinos = repositorioInquilino.ObtenerTodos();
                 ViewBag.Error = ex.Message;
-                ViewBag.StackTrate = ex.StackTrace;
                 return View(contrato);
             }
         }
@@ -175,6 +174,7 @@ namespace InmobiliariaJanett.Controllers
 
             catch (Exception ex)
             {
+                ViewBag.Error = ex.Message;
                 ViewBag.Error = " No se puede eliminar el Contrato";
                 return View(entidad);
 

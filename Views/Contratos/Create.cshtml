@@ -25,7 +25,7 @@
                 <select class="form-control" name="InquilinoId">
                     @foreach (var item in (IList<Inquilino>)ViewBag.Inquilinos)
                     {
-                        <option value="@item.IdInquilino">@(item.Nombre + " " + item.Apellido)</option>
+        <option value="@item.IdInquilino">@(item.Nombre + " " + item.Apellido)</option>
 }
                 </select>
                 <span asp-validation-for="InquilinoId" class="text-danger"></span>
@@ -35,8 +35,8 @@
                 <select class="form-control" name="InmuebleId">
                     @foreach (var item in (IList<Inmueble>)ViewBag.Inmuebles)
                     {
-                        <option value="@item.Id">@(item.Direccion + " Propietario: " + item.Duenio.Nombre)</option>
-                    }
+        <option value="@item.Id">@(item.Direccion + " Propietario: " + item.Duenio.Nombre)</option>
+}
                 </select>
                 <span asp-validation-for="InmuebleId" class="text-danger"></span>
             </div>
@@ -45,11 +45,19 @@
                 <input asp-for="Precio" class="form-control" required />
                 <span asp-validation-for="Precio" class="text-danger"></span>
             </div>
-
             <div class="form-group">
-                <input type="submit" value="Crear" class="btn btn-primary" />
-                <a class="btn btn-secondary" asp-action="Index">Volver </a>
-            </div>
+                <label class="control-label">Propietario</label>
+                <select class="form-control" name="idPropietario">
+                    @foreach (var item in (IList<Inmueble>)ViewBag.Inmuebles)
+                    {
+                    <option value="@item.Id"> @item.Duenio.Nombre </option>
+}
+                </select>
+                </div>
+                <div class="form-group">
+                    <input type="submit" value="Crear" class="btn btn-primary" />
+                    <a class="btn btn-secondary" asp-action="Index">Volver </a>
+                </div>
         </form>
     </div>
 </div>
