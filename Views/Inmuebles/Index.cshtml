@@ -1,15 +1,17 @@
 ﻿@model IEnumerable<InmobiliariaJanett.Models.Inmueble>
 
-@{ ViewData["Title"] = "Index"; }
+<h2>@ViewBag.Title</h2>
+<h3>@ViewBag.Title2</h3>
 
-<h1>Inmuebles</h1>
+<p>
 
-<a asp-action="Create" class="btn btn-primary" style="width:180px;">Crear nuevo <i class="fas fa-plus"> </i></a>
-
+    <a asp-action="Create" class="btn btn-dark" style="width:180px;">Crear nuevo <i class="fas fa-plus"> </i></a>  &nbsp;
+    <a asp-action="InmueblesDisponibles" title="Inmuebles disponibles" class="btn btn-dark">Inmuebles disponibles por estado</a>
+</p>
 <br>
 <br>
 <table class="table">
-    <thead class="thead-primary">
+    <thead class="thead-dark">
         <tr>
             <th>
                 @Html.DisplayNameFor(model => model.Id)
@@ -41,45 +43,44 @@
     <tbody>
         @foreach (var item in Model)
         {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Id)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Direccion)
-            </td>
+<tr>
+    <td>
+        @Html.DisplayFor(modelItem => item.Id)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.Direccion)
+    </td>
 
-            <td>
-                @Html.DisplayFor(modelItem => item.UsoNombre)
-            </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.UsoNombre)
+    </td>
 
-            <td>
-                @Html.DisplayFor(modelItem => item.TipoNombre)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Ambientes)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Precio)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Estado)
-            </td>
-            <td>
-                @(item.Duenio.Nombre + " " + item.Duenio.Apellido)
-            </td>
-            <td>
+    <td>
+        @Html.DisplayFor(modelItem => item.TipoNombre)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.Ambientes)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.Precio)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.Estado)
+    </td>
+    <td>
+        @(item.Duenio.Nombre + " " + item.Duenio.Apellido)
+    </td>
+    <td>
 
-                <i class="fa fa-history"></i>
-            @Html.ActionLink("Ver Contratos", "IndexPorInmueble", "Contratos", new { id = item.Id }) |
-            <i class="fa fa-info-circle"></i>
-            @Html.ActionLink("Editar", "Edit", new { id = item.Id }) |
-            <i class="fa fa-info-circle"></i>
-            @Html.ActionLink("Detalles", "Details", new { id = item.Id }) |
-            <i class="fa fa-trash"></i>
-            @Html.ActionLink("Eliminar", "Delete", new { id = item.Id })
-            </td>
-                        </tr>
-}
+        <a asp-action="IndexPorInmueble" asp-controller="Contratos" asp-route-id="@item.Id" title="Contratos"><i class="fas fa-file-signature"></i></a>&nbsp;
+        <a asp-action="Editar" asp-route-id="@item.Id" title="Editar"><i class="fas fa-edit"></i></a>&nbsp;
+        <a asp-action="Details" asp-route-id="@item.Id" title="Detalles"><i class="fas fa-history"></i></a>&nbsp;
+        @if (ViewContext.HttpContext.User.IsInRole("Administrador"))
+        {
+<a asp-action="Eliminar" asp-route-id="@item.Id" title="Eliminar"><i class="fas fa-trash-alt"></i></a>}
+    </td>
+
+</tr>}
     </tbody>
 </table>
+

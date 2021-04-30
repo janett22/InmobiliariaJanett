@@ -217,10 +217,10 @@ namespace InmobiliariaJanett.Models
 
 			using (SqlConnection connection = new SqlConnection(connectionString))
 			{
-				string sql = $"SELECT c.Id, c.FechaInicio, c.FechaFin c.InquilinoId, i.Nombre, i.Apellido, c.InmuebleId, inm.direccion, inm.IdPropietario " +
+				string sql = $"SELECT c.Id, c.FechaInicio, c.FechaFin, c.InquilinoId, i.Nombre, i.Apellido, c.InmuebleId, inm.direccion, inm.IdPropietario " +
 							 $"FROM Contratos c INNER JOIN Inquilinos i ON i.IdInquilino = c.InquilinoId" +
 							  " INNER JOIN Inmuebles inm ON  inm.Id = c.InmuebleId" +
-							 $" WHERE c.InmuebleId IN(SELECT id FROM Inmuebles WHERE Id = @idInmueble) ";
+							 $" WHERE c.InmuebleId IN(SELECT id FROM Inmuebles WHERE Id = @idInmueble); ";
 
 				using (SqlCommand command = new SqlCommand(sql, connection))
 				{

@@ -3,13 +3,13 @@
 
 
 <BR>
-
-<a asp-action="Create" class="btn btn-primary" style="width:180px;">Crear nuevo pago<i class="fas fa-plus"> </i></a>
-
+<p>
+    <a asp-action="Create" class="btn btn-dark" style="width:180px;"> Crear nuevo <i class="fas fa-plus"> </i></a>
+</p>
 <br>
 <br> 
 <table class="table">
-    <thead class="thead-light">
+    <thead class="thead-dark">
         <tr>
             <th>
                 @Html.DisplayNameFor(model => model.Id)
@@ -55,19 +55,17 @@
                 @Html.DisplayFor(modelItem => item.Importe)
             </td>
             <td>
+                <a asp-action="Edit" asp-route-id="@item.Id" title="Editar"><i class="fas fa-edit"></i></a>&nbsp;
+                <a asp-action="Details" asp-route-id="@item.Id" title="Detalles"><i class="fas fa-history"></i></a>&nbsp;
+
+                @if (ViewContext.HttpContext.User.IsInRole("Administrador"))
+                {
+        <a asp-action="Delete" asp-route-id="@item.Id" title="Eliminar"><i class="fas fa-trash-alt"></i></a>} &nbsp;
                 
-               
-                <i class="fa fa-info-circle"></i>
-                @Html.ActionLink("Editar", "Edit", new { id = item.IdContrato }) |
-                <i class="fa fa-info-circle"></i>
-                @Html.ActionLink("Cancelar", "Delete", new { id = item.Id })  |
-                <i class="fa fa-info-circle"></i>
-                @Html.ActionLink("Detalles", "Details", new { id = item.Id }) |
-                <i class="fa fa-trash"></i>
+
             </td>
+
         </tr>
         }
     </tbody>
 </table>
-
-

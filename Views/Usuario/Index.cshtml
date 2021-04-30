@@ -2,16 +2,16 @@
 
 @{
     ViewData["Title"] = "Index";
-    
+
 }
 
-<h1>Index</h1>
+<h1>Usuarios</h1>
 
 <p>
-    <a asp-action="Create">Create New</a>
+    <a asp-action="Create" class="btn btn-dark" style="width:180px;">Crear nuevo<i class="fas fa-plus"> </i></a>
 </p>
 <table class="table">
-    <thead>
+    <thead class="thead-dark">
         <tr>
             <th>
                 @Html.DisplayNameFor(model => model.Id)
@@ -26,9 +26,6 @@
                 @Html.DisplayNameFor(model => model.Email)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Clave)
-            </th>
-            <th>
                 @Html.DisplayNameFor(model => model.Avatar)
             </th>
             <th>
@@ -41,35 +38,41 @@
         </tr>
     </thead>
     <tbody>
-@foreach (var usuario in (IList<Usuario>)ViewBag.usuarios) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => usuario.Id)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => usuario.Nombre)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => usuario.Apellido)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => usuario.Email)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem =>usuario.Avatar)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => usuario.Rol)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => usuario.RolNombre)
-            </td>
-            <td>
-                @Html.ActionLink("Edit", "Edit", new { id=usuario.Id }) |
-                @Html.ActionLink("Details", "Details", new { id = usuario.Id }) |
-                @Html.ActionLink("Delete", "Delete", new { id=usuario.Id })
-            </td>
-        </tr>
-}
+        @foreach (var usuario in (IList<Usuario>)ViewBag.usuarios)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => usuario.Id)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => usuario.Nombre)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => usuario.Apellido)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => usuario.Email)
+                </td>
+                <td>
+                    <img width="32" src="@usuario.Avatar" />
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => usuario.Rol)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => usuario.RolNombre)
+                </td>
+                <td>
+
+                    <a asp-action="Edit" asp-route-id="@usuario.Id" title="Editar"><i class="fas fa-edit"></i></a>&nbsp;
+                    @if (ViewContext.HttpContext.User.IsInRole("Administrador"))
+                    {
+                        <a asp-action="Delete" asp-route-id="@usuario.Id" title="Eliminar"><i class="fas fa-trash-alt"></i></a>}
+
+                </td>
+            </tr>
+        }
     </tbody>
 </table>
+
+

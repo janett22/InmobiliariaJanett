@@ -161,16 +161,23 @@ namespace InmobiliariaJanett.Controllers
         public ActionResult Delete(int id, Contrato entidad)
         {
             try
+
             {
+
+                ViewBag.IdCont = TempData["IdCont"];
+                int idCont = ViewBag.IdCont;
+                entidad = repositorio.ObtenerPorId(id);
                 repositorio.Baja(id);
+
                 TempData["Mensaje"] = "Eliminación realizada correctamente";
                 return RedirectToAction(nameof(Index));
             }
+
             catch (Exception ex)
             {
-                ViewBag.Error = ex.Message;
-                ViewBag.StackTrate = ex.StackTrace;
+                ViewBag.Error = " No se puede eliminar el Contrato";
                 return View(entidad);
+
             }
         }
 

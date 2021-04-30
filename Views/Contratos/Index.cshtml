@@ -15,7 +15,7 @@
         <label for="FechaFin" class="control-label"></label>
         <input name="FechaFin" type="date" class="form-control" required />
     </div>
-    <button type="submit" class="btn btn-primary" style="margin-bottom: 9px;">Inmuebles disponibles</button>
+    <button type="submit" class="btn btn-dark"style="margin-bottom: 9px;">Inmuebles disponibles</button>
 </form>
 <form class="form-inline" asp-action="BuscarVigentes" asp-controller="Contratos">
     <div class="input-group mb-2 mr-sm-2">
@@ -26,19 +26,19 @@
         <label for="FechaFin" class="control-label"></label>
         <input name="FechaFin" type="date" class="form-control" required />
     </div>
-    <button type="submit" class="btn btn-primary" style="margin-bottom: 9px;">Contratos Vigentes</button>
+    <button type="submit" class="btn btn-dark" style="margin-bottom: 9px;">Contratos Vigentes</button>
 </form>
 
 <br>
 <br>
-<a asp-action="Create" class="btn btn-primary" style="width:180px;">Crear nuevo <i class="fas fa-plus"> </i></a>
+<a asp-action="Create" class="btn btn-dark" style="width:180px;">Crear nuevo <i class="fas fa-plus"> </i></a>
 
-<a asp-action="IndexPorInmueble" class="btn btn-primary" style="width:180px;">Ver Inmuebles <i class="fas fa-plus"> </i></a>
+<a asp-action="IndexPorInmueble" class="btn btn-dark" style="width:180px;">Ver Inmuebles <i class="fas fa-plus"> </i></a>
 
 <br>
 <br>
 <table class="table">
-    <thead class="thead-primary">
+    <thead class="thead-dark">
         <tr>
             <th>
                 @Html.DisplayNameFor(model => model.Id)
@@ -80,19 +80,19 @@
         @Html.DisplayFor(modelItem => item.Inmueble.Direccion)
     </td>
     <td>
+        <a asp-action="Create" asp-route-id="@item.Id" asp-controller="Pagos" title="Pagar"><i class="fas fa-plus"> </a>&nbsp;
+        <a asp-action="Edit" asp-route-id="@item.Id" title="Editar"><i class="fas fa-edit"></i></a>&nbsp;
+        <a asp-action="Details" asp-route-id="@item.Id" title="Detalles"><i class="fas fa-history"></i></a>&nbsp;
 
-        <i class="fa fa-history"></i>
-        @Html.ActionLink("Ver pagos", "PorContrato", "Pagos", new { id = item.Id }) |
-        <i class="fa fa-edit"></i>
-        @Html.ActionLink("Pagar", "Create", "Pagos", new { id = item.Id }) |
-        <i class="fa fa-info-circle"></i>
-        @Html.ActionLink("Editar", "Edit", new { id = item.Id }) |
-        <i class="fa fa-info-circle"></i>
-        @Html.ActionLink("Detalles", "Details", new { id = item.Id }) |
-        <i class="fa fa-trash"></i>
-        @Html.ActionLink("Cancelar", "Delete", new { id = item.Id })
+        @if (ViewContext.HttpContext.User.IsInRole("Administrador"))
+        {
+<a asp-action="Delete" asp-route-id="@item.Id" title="Eliminar"><i class="fas fa-trash-alt"></i></a>} &nbsp;
+
+        <a asp-action="PorContrato" asp-controller="Pagos" asp-route-id="@item.Id" title="Ver Pagos"><i class="fas fa-file-signature"></i></a>
+
     </td>
-</tr>
-}
+
+</tr>}
     </tbody>
 </table>
+

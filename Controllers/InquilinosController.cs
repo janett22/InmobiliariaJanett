@@ -123,8 +123,7 @@ namespace InmobiliariaJanett.Controllers
             }
             catch (Exception ex)
             {
-                ViewBag.Error = ex.Message;
-                ViewBag.StackTrate = ex.StackTrace;
+                ViewBag.Error = "No se puede eliminar el Inquilino, ya que posee Contratos asociados";
                 return View(entidad);
             }
         }

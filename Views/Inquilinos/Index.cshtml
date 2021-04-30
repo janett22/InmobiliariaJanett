@@ -2,15 +2,15 @@
 
 @{ ViewData["Title"] = "Inquilinos"; }
 
-<h1>Inquilino</h1>
+
 
 <p>
-    <a asp-action="Create" class="btn btn-primary" style="width:180px;">Crear nuevo <i class="fas fa-plus"> </i></a>
+    <a asp-action="Create" class="btn btn-dark" style="width:180px;">Crear nuevo <i class="fas fa-plus"> </i></a>
 
 <br>
 <br>
 <table class="table">
-    <thead class="thead-light">
+    <thead class="thead-dark">
         <tr>
             <th>
                 @Html.DisplayNameFor(model => model.IdInquilino)
@@ -56,9 +56,14 @@
         @Html.DisplayFor(modelItem => item.Email)
     </td>
     <td>
-        @Html.ActionLink("Editar", "Edit", new { id = item.IdInquilino }) |
-        @Html.ActionLink("Detalles", "Details", new { id = item.IdInquilino }) |
-        @Html.ActionLink("Eliminar", "Delete", new { id = item.IdInquilino })
+        <a asp-action="Edit" asp-route-id="@item.IdInquilino" title="Editar"><i class="fas fa-edit"></i></a>&nbsp;
+        <a asp-action="Details" asp-route-id="@item.IdInquilino" title="Detalles"><i class="fas fa-history"></i></a>&nbsp;
+
+        @if (ViewContext.HttpContext.User.IsInRole("Administrador"))
+        {
+            <a asp-action="Delete" asp-route-id="@item.IdInquilino" title="Eliminar"><i class="fas fa-trash-alt"></i></a>} &nbsp;
+        }
+
     </td>
 </tr>}
     </tbody>

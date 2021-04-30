@@ -4,13 +4,13 @@
     ViewData["Title"] = "Index";
 }
 
-<h1>Index</h1>
+<h1>Propietarios</h1>
 
 <p>
-    <a asp-action="Create" class="btn btn-primary">Create New</a>
+    <a asp-action="Create" class="btn btn-dark" style="width:180px;">Crear Nuevo <i class="fas fa-plus"></i></a>
 </p>
 <table class="table">
-    <thead>
+    <thead class="thead-dark">
         <tr>
             <th>
                 @Html.DisplayNameFor(model => model.IdPropietario)
@@ -30,47 +30,47 @@
             <th>
                 @Html.DisplayNameFor(model => model.Email)
             </th>
-            <th>
-                @Html.DisplayNameFor(model => model.clave)
-            </th>
             <th></th>
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.IdPropietario)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Nombre)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Apellido)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Dni)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Telefono)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Email)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.clave)
-            </td>
-            <td>
-                <i class="fa fa-history"></i>
-                @Html.ActionLink("Ver Inmuebles", "IndexPorPropietario", "Inmuebles", new { id = item.IdPropietario }) |
-                <i class="fa fa-info-circle"></i>
-                @Html.ActionLink("Editar", "Edit", new { id = item.IdPropietario }) |
-                <i class="fa fa-info-circle"></i>
-                @Html.ActionLink("Detalles", "Details", new { id = item.IdPropietario }) |
-                <i class="fa fa-trash"></i>
-                @Html.ActionLink("Cancelar", "Delete", new { id = item.IdPropietario })
-            </td>
-        </tr>
-}
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.IdPropietario)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Nombre)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Apellido)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Dni)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Telefono)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Email)
+                </td>
+
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.IdPropietario" title="Editar"><i class="fas fa-edit"></i></a>&nbsp;
+                    <a asp-action="Details" asp-route-id="@item.IdPropietario" title="Detalles"><i class="fas fa-history"></i></a>&nbsp;
+
+                    @if (ViewContext.HttpContext.User.IsInRole("Administrador"))
+                    {
+                        <a asp-action="Delete" asp-route-id="@item.IdPropietario" title="Eliminar"><i class="fas fa-trash-alt"></i></a>} &nbsp;
+                    <a asp-action="IndexPorPropietario" asp-controller="Inmuebles" asp-route-id="@item.IdPropietario" title="Ver Inmuebles"><i class="fas fa-history"></i></a>&nbsp;
+
+
+                </td>
+            </tr>
+        }
     </tbody>
 </table>
+
+
+

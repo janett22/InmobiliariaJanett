@@ -197,6 +197,7 @@ namespace InmobiliariaJanett.Controllers
                 TempData["ContId"] = id;
                 TempData["IdPago"] = id;
                 var lista = repositorio.BuscarPorContrato(id);
+                ViewBag.PorContrato = lista;
                 IList<Contrato> contratos = repositorioCont.ObtenerTodos();
                 ViewBag.Pagos = lista;
                 if (TempData.ContainsKey("Id"))

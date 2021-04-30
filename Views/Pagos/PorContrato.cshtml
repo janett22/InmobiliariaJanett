@@ -2,12 +2,16 @@
 
 @{
    ViewData["Title"]="PorContrato" ;
-          }
+          
+    }
 
-<h2>Registro de PagoS</h2>
+<h4>Pagos del propietario: </h4>
+    <p>
+    <a asp-action="Create" class="btn btn-dark" style="width:180px;"> Crear nuevo <i class="fas fa-plus"> </i></a>
+</p>
 
 <table class="table">
-    <thead class="thead-light">
+    <thead class="thead-dark">
         <tr>
             <th>
                 @Html.DisplayNameFor(model => model.Id)
@@ -33,36 +37,34 @@
     <tbody>
         @foreach (var item in Model)
         {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Id)
-            </td>
-            <td>
-                @(item.Contrato.Inquilino.Nombre + " " + item.Contrato.Inquilino.Apellido)
-            </td>
-            <td>
-                @(item.Contrato.Inmueble.Direccion)
-            </td>
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Id)
+                </td>
+                <td>
+                    @(item.Contrato.Inquilino.Nombre + " " + item.Contrato.Inquilino.Apellido)
+                </td>
+                <td>
+                    @(item.Contrato.Inmueble.Direccion)
+                </td>
 
-            <td>
-                @Html.DisplayFor(modelItem => item.NroPago)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Fecha)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Importe)
-            </td>
-            <td>
-                <i class="fa fa-edit"></i>
-                @Html.ActionLink("Editar", "edit", new { id = item.Id }) ||
-                @if (ViewContext.HttpContext.User.IsInRole("Administrador"))
-                {
-                    <i class="fa fa-trash"></i>
-                    @Html.ActionLink("Eliminar", "Delete", new { id = item.Id }, new { onclick = "return confirm('Borrar el Pago?')" })
-                }
-            </td>
-        </tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.NroPago)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Fecha)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Importe)
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.Id" title="Editar"><i class="fas fa-edit"></i></a>&nbsp;
+                    @if (ViewContext.HttpContext.User.IsInRole("Administrador"))
+                    {
+    <a asp-action="Delete" asp-route-id="@item.Id" title="Eliminar"><i class="fas fa-trash-alt"></i></a>}
+                    &nbsp;<a asp-action="indexPorInmueble" asp-controller="Contratos" asp-route-id="@item.Id" title="Contratos"><i class="fas fa-file-signature"></i></a>
+                </td>
+            </tr>
 }
     </tbody>
 </table>

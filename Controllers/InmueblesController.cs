@@ -35,6 +35,9 @@ namespace InmobiliariaJanett.Controllers
         public ActionResult Index()
         {
             var Inmuebles = repositorio.ObtenerTodos();
+
+            ViewData["Title"] = "INMUEBLES";
+
             if (TempData.ContainsKey("Id"))
                 ViewBag.Id = TempData["Id"];
             if (TempData.ContainsKey("Mensaje"))
@@ -48,7 +51,9 @@ namespace InmobiliariaJanett.Controllers
 
             TempData["pro"] = id;
 
+          
             var lista = repositorio.BuscarPorPropietario(id);
+           
             if (TempData.ContainsKey("Id"))
                 ViewBag.Id = TempData["Id"];
             if (TempData.ContainsKey("Mensaje"))
@@ -168,14 +173,20 @@ namespace InmobiliariaJanett.Controllers
         {
             try
             {
+                ViewBag.IdPro = TempData["IdPro"];
+                entidad = repositorio.ObtenerPorId(id);
+                int idPro = ViewBag.IdPro;
+
                 repositorio.Baja(id);
+
                 TempData["Mensaje"] = "Eliminación realizada correctamente";
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction("PorPropietario", new { id = idPro });
             }
             catch (Exception ex)
             {
-                ViewBag.Error = ex.Message;
-                ViewBag.StackTrate = ex.StackTrace;
+                ViewBag.Error = " No se puede eliminar el Inmueble, ya que posee Contratos asociados";
+
+
                 return View(entidad);
             }
         }
