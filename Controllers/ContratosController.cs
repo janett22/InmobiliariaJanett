@@ -34,6 +34,7 @@ namespace InmobiliariaJanett.Controllers
         {
 
             var Con = repositorio.ObtenerTodos();
+            ViewBag.Contratos = Con;
             if (TempData.ContainsKey("Id"))
                 ViewBag.Id = TempData["Id"];
             if (TempData.ContainsKey("Mensaje"))

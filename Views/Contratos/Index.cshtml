@@ -15,7 +15,7 @@
         <label for="FechaFin" class="control-label"></label>
         <input name="FechaFin" type="date" class="form-control" required />
     </div>
-    <button type="submit" class="btn btn-dark"style="margin-bottom: 9px;">Inmuebles disponibles</button>
+    <button type="submit" class="btn btn-dark" style="margin-bottom: 9px;">Inmuebles disponibles</button>
 </form>
 <form class="form-inline" asp-action="BuscarVigentes" asp-controller="Contratos">
     <div class="input-group mb-2 mr-sm-2">
@@ -32,8 +32,6 @@
 <br>
 <br>
 <a asp-action="Create" class="btn btn-dark" style="width:180px;">Crear nuevo <i class="fas fa-plus"> </i></a>
-
-<a asp-action="IndexPorInmueble" class="btn btn-dark" style="width:180px;">Ver Inmuebles <i class="fas fa-plus"> </i></a>
 
 <br>
 <br>
@@ -79,7 +77,7 @@
             <td>
                 @Html.DisplayFor(modelItem => item.Inmueble.Direccion)
             </td>
-
+            
             <td>
                 <a asp-action="Create" asp-route-id="@item.Id" asp-controller="Pagos" title="Pagar"><i class="fas fa-plus"> </a>&nbsp;
                 <a asp-action="Edit" asp-route-id="@item.Id" title="Editar"><i class="fas fa-edit"></i></a>&nbsp;
@@ -93,7 +91,8 @@
 
             </td>
 
-        </tr>}
+        </tr>
+}
     </tbody>
 </table>
 

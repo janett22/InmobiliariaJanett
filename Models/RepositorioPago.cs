@@ -233,7 +233,8 @@ namespace InmobiliariaJanett.Models
                                 " INNER JOIN Inquilinos i ON i.IdInquilino = c.InquilinoId " +
                                 " INNER JOIN Inmuebles inm ON inm.Id = c.InmuebleId " +
                                 " INNER JOIN Propietarios p ON p.IdPropietario = inm.IdPropietario " +
-                                " INNER JOIN Pagos pa ON pa.IdContrato = c.Id ";
+                                " INNER JOIN Pagos pa ON pa.IdContrato = c.Id " +
+                                " WHERE c.id = @id";
                 using (SqlCommand command = new SqlCommand(sql, connection))
                 {
                     command.Parameters.Add("@id", SqlDbType.Int).Value = id;
@@ -280,8 +281,8 @@ namespace InmobiliariaJanett.Models
                                 }
                             },
                         };
-                    }
                     res.Add(entidad);
+                    }
                     }
                     connection.Close();
             }

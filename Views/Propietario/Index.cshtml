@@ -63,7 +63,7 @@
                     @if (ViewContext.HttpContext.User.IsInRole("Administrador"))
                     {
                         <a asp-action="Delete" asp-route-id="@item.IdPropietario" title="Eliminar"><i class="fas fa-trash-alt"></i></a>} &nbsp;
-                    <a asp-action="IndexPorPropietario" asp-controller="Inmuebles" asp-route-id="@item.IdPropietario" title="Ver Inmuebles"><i class="fas fa-history"></i></a>&nbsp;
+                    <a asp-action="IndexPorPropietario" asp-controller="Inmuebles" asp-route-id="@item.IdPropietario" title="Ver Inmuebles"><i class="fas fa-file-signature"></i></a>&nbsp;
 
 
                 </td>

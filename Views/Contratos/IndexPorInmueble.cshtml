@@ -7,7 +7,7 @@
 <h1>Contratos</h1>
 
 <p>
-    <a asp-action="Create" class="btn btn-primary">Crear nuevo<i class="fas fa-plus"> </i></a>
+    <a asp-action="Create" class="btn btn-dar">Crear nuevo<i class="fas fa-plus"> </i></a>
 
 </p>
 <table class="table">
@@ -58,9 +58,7 @@
             {
         <a asp-action="Delete" asp-route-id="@item.Id" title="Eliminar"><i class="fas fa-trash-alt"></i></a>
 }
-            &nbsp;
-            <a asp-action="PorInmueble" asp-controller="Contratos" asp-route-id="@item.Id" title="Contratos"><i class="fas fa-file-signature"></i></a>
-            </td>
+           </td>
         </tr>
 }
     </tbody>
