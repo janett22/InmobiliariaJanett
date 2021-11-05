@@ -1,13 +1,16 @@
-﻿using Microsoft.AspNetCore.Authentication.Cookies;
+﻿using InmobiliariaJanett.Models;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using InmobiliariaJanett.Models;
-using Microsoft.AspNetCore.SignalR;
-using System.Collections;
-using System.Collections.Generic;
+using Microsoft.IdentityModel.Tokens;
+using System.Threading.Tasks;
+
+
 
 
 namespace InmobiliariaJanett
@@ -32,13 +35,53 @@ namespace InmobiliariaJanett
                     options.LoginPath = "/Usuario/Login";
                     options.LogoutPath = "/Usuario/Logout";
                     options.AccessDeniedPath = "/Home/Restringido";
-                });
+                })
+          .AddJwtBearer(options =>//la api web valida con token
+         {
+             options.TokenValidationParameters = new Microsoft.IdentityModel.Tokens.TokenValidationParameters
+             {
+                 ValidateIssuer = true,
+                 ValidateAudience = true,
+                 ValidateLifetime = true,
+                 ValidateIssuerSigningKey = true,
+                 ValidIssuer = configuration["TokenAuthentication:Issuer"],
+                 ValidAudience = configuration["TokenAuthentication:Audience"],
+                 IssuerSigningKey = new SymmetricSecurityKey(System.Text.Encoding.ASCII.GetBytes(
+                     configuration["TokenAuthentication:SecretKey"])),
+             };
+             // opción extra para usar el token el hub
+             options.Events = new JwtBearerEvents
+             {
+                 OnMessageReceived = context =>
+                 {
+                     // Read the token out of the query string
+                     var accessToken = context.Request.Query["access_token"];
+                     // If the request is for our hub...
+                     var path = context.HttpContext.Request.Path;
+                     if (!string.IsNullOrEmpty(accessToken) &&
+                         path.StartsWithSegments("/chatsegurohub"))
+                     {//reemplazar la url por la usada en la ruta ⬆
+                         context.Token = accessToken;
+                     }
+                     return Task.CompletedTask;
+                 }
+             };
+         });
+
             services.AddAuthorization(options =>
             {
                 //options.AddPolicy("Empleado", policy => policy.RequireClaim(ClaimTypes.Role, "Administrador", "Empleado"));
                 options.AddPolicy("Administrador", policy => policy.RequireRole("Administrador", "SuperAdministrador"));
             });
-            services.AddMvc();
+
+            services.AddDbContext<DataContext>(
+                      options =>
+                          options.UseSqlServer(
+                             configuration["ConnectionStrings:DefaultConnection"])
+                                                
+                      );
+
+        services.AddMvc();
             services.AddSignalR();//añade signalR
                                   //IUserIdProvider permite cambiar el ClaimType usado para obtener el UserIdentifier en Hub
 
@@ -47,7 +90,8 @@ namespace InmobiliariaJanett
             Scoped objects are the same within a request, but different across different requests.
             Singleton objects are the same for every object and every request.
             */
-      
+
+
             services.AddTransient<IRepositorioPropietario, RepositorioPropietario>();
             services.AddTransient<IRepositorio<Inquilino>, RepositorioInquilino>();
             services.AddTransient<IRepositorioInmueble, RepositorioInmuebles>();

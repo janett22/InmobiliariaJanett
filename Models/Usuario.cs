@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -15,22 +16,24 @@ namespace InmobiliariaJanett.Models
 			Empleado = 3,
 		}
 
-		public class Usuario
-		{
-			[Key]
-			[Display(Name = "Código")]
-			public int Id { get; set; }
-			[Required]
-			public string Nombre { get; set; }
-			[Required]
-			public string Apellido { get; set; }
-			[Required, EmailAddress]
-			public string Email { get; set; }
-			[Required, DataType(DataType.Password)]
-			public string Clave { get; set; }
-			public string Avatar { get; set; }
-			public IFormFile AvatarFile { get; set; }
-			public int Rol { get; set; }
+	public class Usuario
+	{
+		[Key]
+		[Display(Name = "Código")]
+		public int Id { get; set; }
+		[Required]
+		public string Nombre { get; set; }
+		[Required]
+		public string Apellido { get; set; }
+		[Required, EmailAddress]
+		public string Email { get; set; }
+		[Required, DataType(DataType.Password)]
+		public string Clave { get; set; }
+		public string Avatar { get; set; }
+
+		[NotMapped]
+		public IFormFile AvatarFile { get; set; }
+		public int Rol { get; set; }
 
 			public string RolNombre => Rol > 0 ? ((enRoles)Rol).ToString() : "";
 

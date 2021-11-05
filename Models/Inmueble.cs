@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Http;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -9,7 +10,7 @@ namespace InmobiliariaJanett.Models
 {
     public enum enEstado 
     {
-        Disponible = 1,
+       Disponible = 1,
        NoDisponible = 2,
        EnRefaccion = 3,
     }
@@ -43,13 +44,18 @@ namespace InmobiliariaJanett.Models
         public int Ambientes { get; set; }
        
         public decimal Precio { get; set; }
+        
         public bool Estado { get; set; }
 
-        public int Estado2 { get; set; }
+        //public int Estado { get; set; }
         [Display(Name = "Dueño")]
         public int IdPropietario { get; set; }
         [ForeignKey("IdPropietario")]
         public Propietario Duenio { get; set; }
+        
+        public String Imagen { get; set; }
+        [NotMapped]
+        public IFormFile ImagenFile { get; set; }
 
 
         [NotMapped]

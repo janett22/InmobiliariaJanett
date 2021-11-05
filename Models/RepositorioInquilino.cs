@@ -21,7 +21,7 @@ namespace InmobiliariaJanett.Models
 			List<Inquilino> res = new List<Inquilino>();
 			using (SqlConnection connection = new SqlConnection(connectionString))
 			{
-				string sql = $"SELECT IdInquilino, Nombre, Apellido, Dni, Telefono, Email" +
+				string sql = $"SELECT Id, Nombre, Apellido, Dni, Telefono, Email" +
 					$" FROM Inquilinos";
 				using (SqlCommand command = new SqlCommand(sql, connection))
 				{
@@ -31,7 +31,7 @@ namespace InmobiliariaJanett.Models
 					{
 						Inquilino i = new Inquilino
 						{
-							IdInquilino = reader.GetInt32(0),
+							Id = reader.GetInt32(0),
 							Nombre = reader.GetString(1),
 							Apellido = reader.GetString(2),
 							Dni = reader.GetString(3),
@@ -63,7 +63,7 @@ namespace InmobiliariaJanett.Models
 					command.Parameters.AddWithValue("@email", i.Email);
 					connection.Open();
 					res = Convert.ToInt32(command.ExecuteScalar());
-					i.IdInquilino = res;
+					i.Id = res;
 					connection.Close();
 				}
 			}
@@ -103,7 +103,7 @@ namespace InmobiliariaJanett.Models
 					{
 						i = new Inquilino
 						{
-							IdInquilino = reader.GetInt32(0),
+							Id = reader.GetInt32(0),
 							Nombre = reader.GetString(1),
 							Apellido = reader.GetString(2),
 							Dni = reader.GetString(3),
@@ -131,7 +131,7 @@ namespace InmobiliariaJanett.Models
 					command.Parameters.AddWithValue("@dni", i.Dni);
 					command.Parameters.AddWithValue("@telefono", i.Telefono);
 					command.Parameters.AddWithValue("@email", i.Email);
-					command.Parameters.AddWithValue("@id", i.IdInquilino);
+					command.Parameters.AddWithValue("@id", i.Id);
 					connection.Open();
 					res = command.ExecuteNonQuery();
 					connection.Close();

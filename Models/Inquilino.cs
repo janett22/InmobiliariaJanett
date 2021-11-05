@@ -10,11 +10,18 @@ namespace InmobiliariaJanett.Models
     {
         [Key]
         [Display(Name = "Código")]
-        public int IdInquilino { get; set; }
+        public int Id { get; set; }
         public string Nombre { get; set; }
         public string Apellido { get; set; }
         public string Email  { get; set; }
         public string Dni { get; set; }
         public string Telefono  { get; set; }
+
+        public String NombreGarante { get; set; }
+
+        public String TelefonoGarante { get; set; }
+
+        public String LugarDeTrabajo { get; set; }
+
     }
 }

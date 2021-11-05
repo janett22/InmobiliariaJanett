@@ -90,8 +90,8 @@ namespace InmobiliariaJanett.Models
             IList<Contrato> res = new List<Contrato>();
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
-                string sql = $"SELECT c.Id, c.FechaInicio, c.FechaFin, c.Precio, c.InquilinoId, I.Nombre, I.Apellido, c.InmuebleId, Inmuebles.direccion, Inmuebles.IdPropietario  " +
-                    $" FROM Contratos c INNER JOIN Inquilinos i ON i.IdInquilino = C.InquilinoId " +
+                string sql = $"SELECT c.Id, c.FechaInicio, c.FechaFin, c.Precio, c.InquilinoId, I.Nombre, I.Apellido, c.Id, Inmuebles.direccion, Inmuebles.IdPropietario  " +
+                    $" FROM Contratos c INNER JOIN Inquilinos i ON i.Id = C.InquilinoId " +
                     " INNER JOIN Inmuebles Inmuebles ON Inmuebles.id = c.InmuebleId ";
 
 
@@ -112,7 +112,7 @@ namespace InmobiliariaJanett.Models
                             InquilinoId = reader.GetInt32(4),
                             Inquilino = new Inquilino
                             {
-                                IdInquilino = reader.GetInt32(4),
+                                Id = reader.GetInt32(4),
                                 Nombre = reader.GetString(5),
                                 Apellido = reader.GetString(6),
                             },
@@ -160,7 +160,7 @@ namespace InmobiliariaJanett.Models
                             InquilinoId = reader.GetInt32(3),
                             Inquilino = new Inquilino
                             {
-                                IdInquilino = reader.GetInt32(3),
+                                Id = reader.GetInt32(3),
                                 Nombre = reader.GetString(4),
                                 Apellido = reader.GetString(5),
                             },
@@ -210,7 +210,7 @@ namespace InmobiliariaJanett.Models
                             InquilinoId = reader.GetInt32(3),
                             Inquilino = new Inquilino
                             {
-                                IdInquilino = reader.GetInt32(3),
+                                Id = reader.GetInt32(3),
                                 Nombre = reader.GetString(4),
                                 Apellido = reader.GetString(5),
                             },

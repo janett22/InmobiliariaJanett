@@ -25,7 +25,7 @@
                 <select class="form-control" name="InquilinoId">
                     @foreach (var item in (IList<Inquilino>)ViewBag.Inquilinos)
                     {
-        <option value="@item.IdInquilino">@(item.Nombre + " " + item.Apellido)</option>
+        <option value="@item.Id">@(item.Nombre + " " + item.Apellido)</option>
 }
                 </select>
                 <span asp-validation-for="InquilinoId" class="text-danger"></span>

@@ -76,8 +76,8 @@ namespace InmobiliariaJanett.Controllers
         {
             try
             {
-                ViewBag.IdPro = TempData["IdPro"];
-                TempData["Pro"] = TempData["IdPro"];
+               // ViewBag.IdPro = TempData["IdPro"];
+                //TempData["Pro"] = TempData["IdPro"];
                 ViewBag.Propietarios = repositorioPropietario.ObtenerTodos();
                 ViewBag.Usos = Inmueble.ObtenerUsos();
                 ViewBag.Tipos = Inmueble.ObtenerTipos();

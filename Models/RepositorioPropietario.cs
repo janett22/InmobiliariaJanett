@@ -20,8 +20,8 @@ namespace InmobiliariaJanett.Models
             List<Propietario> res = new List<Propietario>();
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
-                string sql = $"SELECT IdPropietario, Nombre, Apellido, Dni, Telefono, Email, Clave" +
-                    $" FROM Propietarios";
+                string sql = $"SELECT Id, Nombre, Apellido, Dni, Telefono, Email, Clave, Avatar " +
+                    $" FROM Propietario";
                 using (SqlCommand command = new SqlCommand(sql, connection))
                 {
                     connection.Open();
@@ -30,7 +30,7 @@ namespace InmobiliariaJanett.Models
                     {
                         Propietario e = new Propietario
                         {
-                            IdPropietario = reader.GetInt32(0),
+                            Id = reader.GetInt32(0),
                             Nombre = reader.GetString(1),
                             Apellido = reader.GetString(2),
                             Dni = reader.GetString(3),
@@ -65,12 +65,15 @@ namespace InmobiliariaJanett.Models
                     command.Parameters.AddWithValue("@clave", p.clave);
                     connection.Open();
                     res = Convert.ToInt32(command.ExecuteScalar());
-                    p.IdPropietario = res;
+                    p.Id = res;
                     connection.Close();
                 }
             }
             return res;
         }
+
+
+
         public int Eliminar(int id)
         {
             int res = -1;
@@ -106,7 +109,7 @@ namespace InmobiliariaJanett.Models
                     {
                         p = new Propietario
                         {
-                            IdPropietario = reader.GetInt32(0),
+                            Id = reader.GetInt32(0),
                             Nombre = reader.GetString(1),
                             Apellido = reader.GetString(2),
                             Dni = reader.GetString(3),
@@ -137,7 +140,7 @@ namespace InmobiliariaJanett.Models
                     command.Parameters.AddWithValue("@telefono", p.Telefono);
                     command.Parameters.AddWithValue("@email", p.Email);
                     command.Parameters.AddWithValue("@clave", p.clave);
-                    command.Parameters.AddWithValue("@id", p.IdPropietario);
+                    command.Parameters.AddWithValue("@id", p.Id);
                     connection.Open();
                     res = command.ExecuteNonQuery();
                     connection.Close();

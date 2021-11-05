@@ -33,6 +33,12 @@ namespace InmobiliariaJanett.Models
 					command.Parameters.AddWithValue("@precio", entidad.Precio);
 					command.Parameters.AddWithValue("@estado", entidad.Estado);
 					command.Parameters.AddWithValue("@IdPropietario", entidad.IdPropietario);
+					
+
+
+
+
+
 					connection.Open();
 					res = Convert.ToInt32(command.ExecuteScalar());
 					entidad.Id = res;
@@ -93,7 +99,7 @@ namespace InmobiliariaJanett.Models
 			{
 				string sql = "SELECT Id, Direccion, Uso, Tipo, Ambientes, Precio, Estado, i.IdPropietario," +
 					" p.Nombre, p.Apellido" +
-					" FROM Inmuebles i INNER JOIN Propietarios p ON i.IdPropietario = p.IdPropietario";
+					" FROM Inmuebles i INNER JOIN Propietarios p ON i.IdPropietario = p.Id";
 				using (SqlCommand command = new SqlCommand(sql, connection))
 				{
 					command.CommandType = CommandType.Text;
@@ -113,7 +119,7 @@ namespace InmobiliariaJanett.Models
 							IdPropietario = reader.GetInt32(7),
 							Duenio = new Propietario
 							{
-								IdPropietario = reader.GetInt32(7),
+								Id = reader.GetInt32(7),
 								Nombre = reader.GetString(8),
 								Apellido = reader.GetString(9),
 							}
@@ -154,7 +160,7 @@ namespace InmobiliariaJanett.Models
 							IdPropietario = reader.GetInt32(7),
 							Duenio = new Propietario
 							{
-								IdPropietario = reader.GetInt32(7),
+								Id = reader.GetInt32(7),
 								Nombre = reader.GetString(8),
 								Apellido = reader.GetString(9),
 							}
@@ -197,7 +203,7 @@ namespace InmobiliariaJanett.Models
 							IdPropietario = reader.GetInt32(7),
 							Duenio = new Propietario
 							{
-								IdPropietario = reader.GetInt32(7),
+								Id = reader.GetInt32(7),
 								Nombre = reader.GetString(8),
 								Apellido = reader.GetString(9),
 							}
@@ -239,7 +245,7 @@ namespace InmobiliariaJanett.Models
 							InquilinoId = reader.GetInt32(3),
 							Inquilino = new Inquilino
 							{
-								IdInquilino = reader.GetInt32(3),
+								Id = reader.GetInt32(3),
 								Nombre = reader.GetString(4),
 								Apellido = reader.GetString(5),
 							},
@@ -296,7 +302,7 @@ namespace InmobiliariaJanett.Models
 							IdPropietario = reader.GetInt32(7),
 							Duenio = new Propietario
 							{
-								IdPropietario = reader.GetInt32(7),
+								Id = reader.GetInt32(7),
 								Nombre = reader.GetString(8),
 								Apellido = reader.GetString(9),
 							}
@@ -343,7 +349,7 @@ namespace InmobiliariaJanett.Models
 							IdPropietario = reader.GetInt32(7),
 							Duenio = new Propietario
 							{
-								IdPropietario = reader.GetInt32(7),
+								Id = reader.GetInt32(7),
 								Nombre = reader.GetString(8),
 								Apellido = reader.GetString(9),
 							}

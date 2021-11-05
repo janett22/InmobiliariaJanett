@@ -1,5 +1,6 @@
 ﻿ using InmobiliariaJanett.Models;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Cryptography.KeyDerivation;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
@@ -50,12 +51,20 @@ namespace InmobiliariaJanett.Controllers
         {
             try
             {
-                int res = repositorioPropietario.Alta(p);
-                return RedirectToAction(nameof(Index));
+
+                        p.clave = Convert.ToBase64String(KeyDerivation.Pbkdf2(
+                        password: p.clave,
+                        salt: System.Text.Encoding.ASCII.GetBytes(configuration["Salt"]),
+                        prf: KeyDerivationPrf.HMACSHA1,
+                        iterationCount: 1000,
+                        numBytesRequested: 256 / 8));
+                        int res = repositorioPropietario.Alta(p);
+                        return RedirectToAction(nameof(Index));
             }
             catch
             {
                 return View();
+
             }
 
         }
